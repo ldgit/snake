@@ -15,6 +15,7 @@ gameStateStore.subscribe(newGameState => (gameState = newGameState));
 main {
   display: flex;
   flex-direction: column;
+  align-items: center;
   text-align: center;
   max-width: 240px;
   margin: 0 auto;

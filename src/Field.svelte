@@ -34,6 +34,8 @@ function getSquareClasses(square) {
   padding: 3px;
   flex-grow: 5;
   border: 3px solid black;
+  max-width: 1200px;
+  width: 100%;
 }
 
 .square {
