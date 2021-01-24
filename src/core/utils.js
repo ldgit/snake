@@ -18,3 +18,12 @@ export function createFlattenedCoordinatesField(width, height) {
   });
   return coordinatesField.flat();
 }
+
+export function findCoordinatesForSquare(field, fn) {
+  let coordinates;
+  field.forEach((rowArray, row) => {
+    rowArray.forEach((square, column) => (fn(square) ? (coordinates = { row, column }) : null));
+  });
+
+  return coordinates;
+}

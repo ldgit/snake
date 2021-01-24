@@ -1,13 +1,6 @@
 import { newGame, moveSnake } from './snake';
 import { createRandomNumberGenerator, WIDTH, HEIGHT, STARTING_ROW } from './utils';
-
-function selectField(gameState) {
-  return gameState.field;
-}
-
-function selectDirection(gameState) {
-  return gameState.direction;
-}
+import { selectDirection, selectField, selectSnakeSize } from './selectors';
 
 describe('newGame', () => {
   it('should return a field 31x18 in size', () => {
@@ -22,12 +15,13 @@ describe('newGame', () => {
       const gameState = newGame();
       const field = selectField(gameState);
       expect(field[STARTING_ROW][13]).toEqual({ type: 'snake', bodyPart: 'tail' });
-      expect(field[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'trunk' });
-      expect(field[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk' });
-      expect(field[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk' });
-      expect(field[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk' });
+      expect(field[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
+      expect(field[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
+      expect(field[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
+      expect(field[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
       expect(field[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'head' });
       expect(selectDirection(gameState)).toEqual('right');
+      expect(selectSnakeSize(gameState)).toEqual(6);
       // There should be only one food placed on the field
       expect(field.flat().filter(value => value?.type === 'food')).toHaveLength(1);
     }
@@ -46,22 +40,47 @@ describe('newGame', () => {
 });
 
 describe('moveSnake', () => {
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('should move snake by one square in current direction', () => {
+  it('should move snake by one square in current direction', () => {
     const initialGameState = newGame(1234);
 
-    const newGameState = moveSnake(initialGameState);
-
-    const field = selectField(newGameState);
-    expect(field[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'tail' });
-    expect(field[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk' });
-    expect(field[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk' });
-    expect(field[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk' });
-    expect(field[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'trunk' });
-    expect(field[STARTING_ROW][19]).toEqual({ type: 'snake', bodyPart: 'head' });
-    expect(selectDirection(newGameState)).toEqual('right');
+    const gameState1 = moveSnake(initialGameState);
+    expect(selectSnakeSize(gameState1)).toEqual(6);
+    const field1 = selectField(gameState1);
+    expect(field1[STARTING_ROW][13]).toBeNull();
+    // Original head is now a trunk
+    expect(field1[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
+    expect(field1[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
+    expect(field1[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
+    expect(field1[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
+    // Last snake trunk element is now a tail
+    expect(field1[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'tail' });
+    // Head moves forward
+    expect(field1[STARTING_ROW][19]).toEqual({ type: 'snake', bodyPart: 'head' });
+    expect(selectDirection(gameState1)).toEqual('right');
     // Food is not moved
-    expect(selectField(newGameState)[10][7]).toEqual({ type: 'food' });
+    expect(field1[5][17]).toEqual({ type: 'food' });
+
+    const gameState2 = moveSnake(gameState1);
+    const field2 = selectField(gameState2);
+    expect(field2[STARTING_ROW][13]).toBeNull();
+    expect(field2[STARTING_ROW][14]).toBeNull();
+    // Original head is now a trunk
+    expect(field2[STARTING_ROW][19]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
+    expect(field2[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'tail' });
+    expect(field2[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
+    expect(field2[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
+    expect(field2[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
+    expect(field2[STARTING_ROW][20]).toEqual({ type: 'snake', bodyPart: 'head' });
+    expect(selectDirection(gameState2)).toEqual('right');
+    // Food is not moved
+    expect(selectField(gameState2)[5][17]).toEqual({ type: 'food' });
+  });
+
+  it('should not modify other squares', () => {
+    const initialGameState = newGame(1234);
+    const gameState = moveSnake(initialGameState);
+    const field = selectField(gameState);
+    expect(field.flat().filter(value => value === null)).toHaveLength(WIDTH * HEIGHT - 1 - 6);
   });
 });
 

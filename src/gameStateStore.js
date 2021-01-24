@@ -1,10 +1,13 @@
 import { writable } from 'svelte/store';
-import { newGame } from './core/snake';
+import { moveSnake, newGame } from './core/snake';
 
 function createGameStateStore() {
-  const { subscribe } = writable(newGame());
+  const { subscribe, update } = writable(newGame());
 
-  return { subscribe };
+  return {
+    subscribe,
+    moveSnake: () => update(previousGameState => moveSnake(previousGameState)),
+  };
 }
 
 export default createGameStateStore();
