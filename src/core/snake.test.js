@@ -1,5 +1,5 @@
-import newGame from './snake';
-import { createRandomNumberGenerator } from './utils';
+import { newGame, moveSnake } from './snake';
+import { createRandomNumberGenerator, WIDTH, HEIGHT, STARTING_ROW } from './utils';
 
 function selectField(gameState) {
   return gameState.field;
@@ -13,20 +13,20 @@ describe('newGame', () => {
   it('should return a field 31x18 in size', () => {
     const gameState = newGame();
     const field = selectField(gameState);
-    expect(field).toHaveLength(32);
-    field.forEach(gameRow => expect(gameRow).toHaveLength(17));
+    expect(field).toHaveLength(HEIGHT);
+    field.forEach(gameRow => expect(gameRow).toHaveLength(WIDTH));
   });
 
   it('should set the snake in starting position: length of 6, horizontal facing right, and place the food', () => {
     for (let index = 0; index < 1000; index++) {
       const gameState = newGame();
       const field = selectField(gameState);
-      expect(field[13][9]).toEqual({ type: 'snake', tail: true, head: false });
-      expect(field[14][9]).toEqual({ type: 'snake', tail: false, head: false });
-      expect(field[15][9]).toEqual({ type: 'snake', tail: false, head: false });
-      expect(field[16][9]).toEqual({ type: 'snake', tail: false, head: false });
-      expect(field[17][9]).toEqual({ type: 'snake', tail: false, head: false });
-      expect(field[18][9]).toEqual({ type: 'snake', tail: false, head: true });
+      expect(field[STARTING_ROW][13]).toEqual({ type: 'snake', bodyPart: 'tail' });
+      expect(field[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'trunk' });
+      expect(field[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk' });
+      expect(field[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk' });
+      expect(field[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk' });
+      expect(field[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'head' });
       expect(selectDirection(gameState)).toEqual('right');
       // There should be only one food placed on the field
       expect(field.flat().filter(value => value?.type === 'food')).toHaveLength(1);
@@ -34,15 +34,35 @@ describe('newGame', () => {
   });
 
   it.each([
-    [1234, { x: 10, y: 7 }],
-    [5385008, { x: 19, y: 12 }],
+    [1234, { row: 5, column: 17 }],
+    [5385008, { row: 10, column: 15 }],
   ])(
     'should pick a random spot in the field for snake food (seed: %s, coordinates: %s)',
-    (seed, { x, y }) => {
+    (seed, { row, column }) => {
       const gameState = newGame(seed);
-      expect(selectField(gameState)[x][y]).toEqual({ type: 'food' });
+      expect(selectField(gameState)[row][column]).toEqual({ type: 'food' });
     },
   );
+});
+
+describe('moveSnake', () => {
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('should move snake by one square in current direction', () => {
+    const initialGameState = newGame(1234);
+    
+    const newGameState = moveSnake(initialGameState);
+
+    const field = selectField(newGameState);
+    expect(field[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'tail' });
+    expect(field[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk' });
+    expect(field[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk' });
+    expect(field[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk' });
+    expect(field[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'trunk' });
+    expect(field[STARTING_ROW][19]).toEqual({ type: 'snake', bodyPart: 'head' });
+    expect(selectDirection(newGameState)).toEqual('right');
+    // Food is not moved
+    expect(selectField(newGameState)[10][7]).toEqual({ type: 'food' });
+  });
 });
 
 // eslint-disable-next-line no-unused-vars

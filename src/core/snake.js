@@ -1,18 +1,16 @@
-import { createRandomNumberGenerator, createFlattenedCoordinatesField } from './utils';
+import { createRandomNumberGenerator, createFlattenedCoordinatesField, WIDTH, HEIGHT, STARTING_ROW } from './utils';
 
-const WIDTH = 32;
-const HEIGHT = 17;
-const flattenedCoordinatesField = createFlattenedCoordinatesField(WIDTH, HEIGHT);
+const flattenedCoordinatesField = createFlattenedCoordinatesField(HEIGHT, WIDTH);
 
-export default function newGame(seed = Math.floor(Math.random() * 10000000)) {
-  const field = new Array(WIDTH).fill(null).map(() => new Array(HEIGHT).fill(null));
+export function newGame(seed = Math.floor(Math.random() * 10000000)) {
+  const field = new Array(HEIGHT).fill(null).map(() => new Array(WIDTH).fill(null));
 
-  field[13][9] = { type: 'snake', tail: true, head: false };
-  field[14][9] = { type: 'snake', tail: false, head: false };
-  field[15][9] = { type: 'snake', tail: false, head: false };
-  field[16][9] = { type: 'snake', tail: false, head: false };
-  field[17][9] = { type: 'snake', tail: false, head: false };
-  field[18][9] = { type: 'snake', tail: false, head: true };
+  field[STARTING_ROW][13] = { type: 'snake', bodyPart: 'tail' };
+  field[STARTING_ROW][14] = { type: 'snake', bodyPart: 'trunk' };
+  field[STARTING_ROW][15] = { type: 'snake', bodyPart: 'trunk' };
+  field[STARTING_ROW][16] = { type: 'snake', bodyPart: 'trunk' };
+  field[STARTING_ROW][17] = { type: 'snake', bodyPart: 'trunk' };
+  field[STARTING_ROW][18] = { type: 'snake', bodyPart: 'head' };
 
   const foodCoordinates = generateFoodCoordinates(seed, field);
   field[foodCoordinates.x][foodCoordinates.y] = { type: 'food' };
@@ -23,7 +21,13 @@ export default function newGame(seed = Math.floor(Math.random() * 10000000)) {
   };
 }
 
-export function moveSnake(gameState) {}
+export function moveSnake(gameState) {
+  // have direction in state, but outside field
+  // first move snake element from tail
+  // add new snake element to field in where head is (use main direction)
+  // can't change direction to go back into snake body
+  return gameState;
+}
 
 export function changeDirection(gameState, newDirection) {}
 

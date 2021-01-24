@@ -1,5 +1,9 @@
 import seedrandom from 'seedrandom';
 
+export const WIDTH = 32;
+export const HEIGHT = 17;
+export const STARTING_ROW = 8;
+
 export function createRandomNumberGenerator(seed, { max, min = 0 }) {
   const rng = seedrandom(seed);
   return () => min + Math.floor(rng() * max);
