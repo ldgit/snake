@@ -7,7 +7,8 @@
     "dev": "rollup -c -w",
     "start": "sirv public",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:watch": "npm test -- --watch",
+    "test:all": "npm run lint && npm run style && npm test",
     "lint": "eslint .",
     "style": "prettier --check .",
     "style:fix": "prettier --write ."

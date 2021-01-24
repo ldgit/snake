@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import {newGame } from './core/snake';
+import { newGame } from './core/snake';
 
 function createGameStateStore() {
   const { subscribe } = writable(newGame());
@@ -7,4 +7,4 @@ function createGameStateStore() {
   return { subscribe };
 }
 
-export default createGameStateStore(); 
+export default createGameStateStore();

@@ -8,7 +8,7 @@ function getSquareClasses(square) {
     return `snake ${square.bodyPart}`;
   }
 
-  if(square?.type === 'food') {
+  if (square?.type === 'food') {
     return 'food';
   }
 
@@ -19,7 +19,7 @@ function getSquareClasses(square) {
 <div class="snakeBox" style="--width: {WIDTH}; --height: {HEIGHT};">
   {#each gameState.field as row}
     {#each row as square}
-      <div class="square {getSquareClasses(square)}"/>
+      <div class="square {getSquareClasses(square)}" />
     {/each}
   {/each}
 </div>
@@ -66,5 +66,4 @@ function getSquareClasses(square) {
   width: 80%;
   height: 80%;
 }
-
 </style>

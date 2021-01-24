@@ -49,7 +49,7 @@ describe('moveSnake', () => {
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip('should move snake by one square in current direction', () => {
     const initialGameState = newGame(1234);
-    
+
     const newGameState = moveSnake(initialGameState);
 
     const field = selectField(newGameState);

@@ -1,4 +1,10 @@
-import { createRandomNumberGenerator, createFlattenedCoordinatesField, WIDTH, HEIGHT, STARTING_ROW } from './utils';
+import {
+  createRandomNumberGenerator,
+  createFlattenedCoordinatesField,
+  WIDTH,
+  HEIGHT,
+  STARTING_ROW,
+} from './utils';
 
 const flattenedCoordinatesField = createFlattenedCoordinatesField(HEIGHT, WIDTH);
 
@@ -29,6 +35,7 @@ export function moveSnake(gameState) {
   return gameState;
 }
 
+// eslint-disable-next-line no-unused-vars
 export function changeDirection(gameState, newDirection) {}
 
 /**
