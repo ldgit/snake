@@ -1,8 +1,8 @@
-import seedrandom from 'seedrandom';
+import { createRandomNumberGenerator, createFlattenedCoordinatesField } from './utils';
 
 const WIDTH = 32;
 const HEIGHT = 17;
-const flattenedCoordinatesField = createFlattenedCoordinatesField();
+const flattenedCoordinatesField = createFlattenedCoordinatesField(WIDTH, HEIGHT);
 
 export default function newGame(seed = Math.floor(Math.random() * 10000000)) {
   const field = new Array(WIDTH).fill(null).map(() => new Array(HEIGHT).fill(null));
@@ -17,29 +17,28 @@ export default function newGame(seed = Math.floor(Math.random() * 10000000)) {
   const foodCoordinates = generateFoodCoordinates(seed, field);
   field[foodCoordinates.x][foodCoordinates.y] = { type: 'food' };
 
-  return field;
+  return {
+    field,
+    direction: 'right',
+  };
 }
 
-export function createRandomNumberGenerator(seed, { max, min = 0 }) {
-  const rng = seedrandom(seed);
-  return () => min + Math.floor(rng() * max);
-}
+export function moveSnake(gameState) {}
 
+export function changeDirection(gameState, newDirection) {}
+
+/**
+ * Pick food location at random, avoiding fields occupied by the snake.
+ *
+ * @param {number|string} seed
+ * @param {any[][]} fieldWithSnake
+ */
 function generateFoodCoordinates(seed, fieldWithSnake) {
+  // Selecting from an array of free coordinates ensures that each field has the same chance of containing food.
   const freeCoordinates = flattenedCoordinatesField.filter(({ x, y }) => {
     return fieldWithSnake[x][y]?.type !== 'snake';
   });
 
   const random = createRandomNumberGenerator(seed, { max: freeCoordinates.length });
   return freeCoordinates[random()];
-}
-
-function createFlattenedCoordinatesField() {
-  const emptyField = new Array(WIDTH).fill(null).map(() => new Array(HEIGHT).fill(null));
-  const coordinatesField = emptyField.map((column, xIndex) => {
-    return column.map((value, yIndex) => {
-      return { x: xIndex, y: yIndex };
-    });
-  });
-  return coordinatesField.flat();
 }

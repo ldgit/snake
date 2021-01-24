@@ -1,39 +1,46 @@
-import newGame, { createRandomNumberGenerator } from './snake';
+import newGame from './snake';
+import { createRandomNumberGenerator } from './utils';
 
-// Deliberate, generates [15][9] (snake head position, forbidden) on first try
-const TEST_SEED = 5385008;
+function selectField(gameState) {
+  return gameState.field;
+}
+
+function selectDirection(gameState) {
+  return gameState.direction;
+}
 
 describe('newGame', () => {
   it('should return a field 31x18 in size', () => {
-    const gameState = newGame(TEST_SEED);
-    expect(gameState).toHaveLength(32);
-    gameState.forEach(gameRow => {
-      expect(gameRow).toHaveLength(17);
-    });
+    const gameState = newGame();
+    const field = selectField(gameState);
+    expect(field).toHaveLength(32);
+    field.forEach(gameRow => expect(gameRow).toHaveLength(17));
   });
 
   it('should set the snake in starting position: length of 6, horizontal facing right, and place the food', () => {
     for (let index = 0; index < 1000; index++) {
       const gameState = newGame();
-      expect(gameState[13][9]).toEqual({ type: 'snake', tail: true, head: false });
-      expect(gameState[14][9]).toEqual({ type: 'snake', tail: false, head: false });
-      expect(gameState[15][9]).toEqual({ type: 'snake', tail: false, head: false });
-      expect(gameState[16][9]).toEqual({ type: 'snake', tail: false, head: false });
-      expect(gameState[17][9]).toEqual({ type: 'snake', tail: false, head: false });
-      expect(gameState[18][9]).toEqual({ type: 'snake', tail: false, head: true });
+      const field = selectField(gameState);
+      expect(field[13][9]).toEqual({ type: 'snake', tail: true, head: false });
+      expect(field[14][9]).toEqual({ type: 'snake', tail: false, head: false });
+      expect(field[15][9]).toEqual({ type: 'snake', tail: false, head: false });
+      expect(field[16][9]).toEqual({ type: 'snake', tail: false, head: false });
+      expect(field[17][9]).toEqual({ type: 'snake', tail: false, head: false });
+      expect(field[18][9]).toEqual({ type: 'snake', tail: false, head: true });
+      expect(selectDirection(gameState)).toEqual('right');
       // There should be only one food placed on the field
-      expect(gameState.flat().filter(value => value?.type === 'food')).toHaveLength(1);
+      expect(field.flat().filter(value => value?.type === 'food')).toHaveLength(1);
     }
   });
 
   it.each([
     [1234, { x: 10, y: 7 }],
-    [TEST_SEED, { x: 19, y: 12 }],
+    [5385008, { x: 19, y: 12 }],
   ])(
-    'should pick a random spot in the field for snake food (seed: %s, coord: %s)',
+    'should pick a random spot in the field for snake food (seed: %s, coordinates: %s)',
     (seed, { x, y }) => {
       const gameState = newGame(seed);
-      expect(gameState[x][y]).toEqual({ type: 'food' });
+      expect(selectField(gameState)[x][y]).toEqual({ type: 'food' });
     },
   );
 });
