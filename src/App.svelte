@@ -2,22 +2,10 @@
 import { onDestroy } from 'svelte';
 import gameStateStore from './gameStateStore';
 import Field from './Field.svelte';
+import Controls from './Controls.svelte';
 
 let gameState;
-let speed = 7;
-const speedMap = [
-  { delay: 500, description: 'Dead snail on a slope' },
-  { delay: 400, description: 'Snail' },
-  { delay: 350, description: 'Snail running from a bird' },
-  { delay: 300, description: 'Lethargic turtle' },
-  { delay: 250, description: 'Turtle' },
-  { delay: 200, description: 'Turtle on a skateboard' },
-  { delay: 130, description: 'Regular' },
-  { delay: 100, description: 'Fast' },
-  { delay: 70, description: 'Cheetah' },
-  { delay: 50, description: 'Cheetah driving a Porsche' },
-  { delay: 10, description: 'Bolt of Lighting' },
-];
+let delay;
 
 gameStateStore.subscribe(newGameState => (gameState = newGameState));
 function handleKeypress(event) {
@@ -34,11 +22,11 @@ function handleKeypress(event) {
 }
 
 document.addEventListener('keypress', handleKeypress);
-let intervalId = setInterval(gameStateStore.moveSnake, speedMap[speed].delay);
+let intervalId = setInterval(gameStateStore.moveSnake, delay);
 
 $: {
   clearInterval(intervalId);
-  intervalId = setInterval(gameStateStore.moveSnake, speedMap[speed].delay);
+  intervalId = setInterval(gameStateStore.moveSnake, delay);
 }
 
 onDestroy(() => {
@@ -50,10 +38,7 @@ onDestroy(() => {
 <main>
   <h1>Snake</h1>
   <Field {gameState} />
-  <div class="controls">
-    <span>Speed: {speedMap[speed].description}</span>
-    <input type="range" bind:value={speed} min="0" max={speedMap.length - 1} step="1" />
-  </div>
+  <Controls bind:delay />
 </main>
 
 <style>
@@ -78,15 +63,5 @@ h1 {
   main {
     max-width: none;
   }
-}
-
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.controls span {
-  width: 300px;
 }
 </style>
