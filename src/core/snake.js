@@ -36,14 +36,19 @@ function getNewHeadCoordinates(field, direction) {
     square => square?.type === 'snake' && square.bodyPart === 'head',
   );
 
-  let newHeadColumn;
+  let newHeadColumn = headCoordinates.column;
   if (direction === 'left') {
     newHeadColumn = headCoordinates.column - 1 < 0 ? WIDTH - 1 : headCoordinates.column - 1;
-  } else {
+  } else if (direction === 'right') {
     newHeadColumn = headCoordinates.column + 1 === WIDTH ? 0 : headCoordinates.column + 1;
   }
 
-  return { ...headCoordinates, column: newHeadColumn };
+  let newHeadRow = headCoordinates.row;
+  if (direction === 'up') {
+    newHeadRow = headCoordinates.row - 1 < 0 ? HEIGHT - 1 : headCoordinates.row - 1;
+  }
+
+  return { row: newHeadRow, column: newHeadColumn };
 }
 
 export function moveSnake(gameState) {
