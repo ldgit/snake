@@ -4,6 +4,7 @@ import Field from './Field.svelte';
 
 let gameState;
 gameStateStore.subscribe(newGameState => (gameState = newGameState));
+setInterval(gameStateStore.moveSnake, 50);
 </script>
 
 <main>

@@ -1,4 +1,4 @@
-import { newGame, moveSnake } from './snake';
+import { newGame, moveSnake, createEmptyField, snakeTail, snakeHead, snakeTrunk } from './snake';
 import { createRandomNumberGenerator, WIDTH, HEIGHT, STARTING_ROW } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 
@@ -14,6 +14,7 @@ describe('newGame', () => {
     for (let index = 0; index < 1000; index++) {
       const gameState = newGame();
       const field = selectField(gameState);
+      // Note: Snake body part helpers not used on purpose, to test them
       expect(field[STARTING_ROW][13]).toEqual({ type: 'snake', bodyPart: 'tail' });
       expect(field[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
       expect(field[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
@@ -47,6 +48,7 @@ describe('moveSnake', () => {
     expect(selectSnakeSize(gameState1)).toEqual(6);
     const field1 = selectField(gameState1);
     expect(field1[STARTING_ROW][13]).toBeNull();
+    // Note: Snake body part helpers not used on purpose, to test them
     // Original head is now a trunk
     expect(field1[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
     expect(field1[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
@@ -82,6 +84,37 @@ describe('moveSnake', () => {
     const field = selectField(gameState);
     expect(field.flat().filter(value => value === null)).toHaveLength(WIDTH * HEIGHT - 1 - 6);
   });
+
+  it('should come out the other end if it hits the right wall', () => {
+    const startingField = createEmptyField(WIDTH, HEIGHT);
+    startingField[STARTING_ROW][WIDTH - 6] = snakeTail();
+    startingField[STARTING_ROW][WIDTH - 5] = snakeTrunk({ index: 3 });
+    startingField[STARTING_ROW][WIDTH - 4] = snakeTrunk({ index: 2 });
+    startingField[STARTING_ROW][WIDTH - 3] = snakeTrunk({ index: 1 });
+    startingField[STARTING_ROW][WIDTH - 2] = snakeTrunk({ index: 0 });
+    startingField[STARTING_ROW][WIDTH - 1] = snakeHead();
+    const gameState = { field: startingField, direction: 'right', snakeSize: 6 };
+
+    const newGameState = moveSnake(gameState);
+
+    const field = selectField(newGameState);
+
+    expect(field[STARTING_ROW][0]).toEqual(snakeHead());
+  });
+
+  it.todo('should be able to move left');
+  it.todo('should be able to move up');
+  it.todo('should be able to move down');
+
+  it.todo('should come out the other end if it hits the left wall');
+  it.todo('should come out the other end if it hits the top wall');
+  it.todo('should come out the other end if it hits the bottom wall');
+  it.todo('should move correctly if bent');
+
+  it.todo('can crash into itself');
+
+  it.todo('should eat food when it moves onto it and increase in size');
+  it.todo('should create new food when current one eaten and increase in size');
 });
 
 // eslint-disable-next-line no-unused-vars
