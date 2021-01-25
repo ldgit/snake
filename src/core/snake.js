@@ -5,6 +5,7 @@ import {
   HEIGHT,
   STARTING_ROW,
   findCoordinatesForSquare,
+  areOpposite,
 } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 
@@ -69,8 +70,14 @@ export function moveSnake(gameState) {
   };
 }
 
-// eslint-disable-next-line no-unused-vars
-export function changeDirection(gameState, newDirection) {}
+export function changeDirection(gameState, newDirection) {
+  const oldDirection = selectDirection(gameState);
+
+  return {
+    ...gameState,
+    direction: areOpposite(oldDirection, newDirection) ? oldDirection : newDirection,
+  };
+}
 
 export function createEmptyField(width, height) {
   return new Array(height).fill(null).map(() => new Array(width).fill(null));

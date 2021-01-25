@@ -27,3 +27,9 @@ export function findCoordinatesForSquare(field, fn) {
 
   return coordinates;
 }
+
+const oppositeDirections = [['left', 'right'].sort().join(','), ['up', 'down'].sort().join(',')];
+
+export function areOpposite(direction1, direction2) {
+  return oppositeDirections.indexOf([direction1, direction2].sort().join(',')) >= 0;
+}
