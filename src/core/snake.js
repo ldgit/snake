@@ -12,7 +12,6 @@ const flattenedCoordinatesField = createFlattenedCoordinatesField(HEIGHT, WIDTH)
 
 export function newGame(seed = Math.floor(Math.random() * 10000000)) {
   const field = createEmptyField(WIDTH, HEIGHT);
-
   field[STARTING_ROW][13] = snakeTail();
   field[STARTING_ROW][14] = snakeTrunk({ index: 3 });
   field[STARTING_ROW][15] = snakeTrunk({ index: 2 });
@@ -37,7 +36,12 @@ function getNewHeadCoordinates(field, direction) {
     square => square?.type === 'snake' && square.bodyPart === 'head',
   );
 
-  const newHeadColumn = headCoordinates.column + 1 === WIDTH ? 0 : headCoordinates.column + 1;
+  let newHeadColumn;
+  if (direction === 'left') {
+    newHeadColumn = headCoordinates.column - 1 < 0 ? WIDTH - 1 : headCoordinates.column - 1;
+  } else {
+    newHeadColumn = headCoordinates.column + 1 === WIDTH ? 0 : headCoordinates.column + 1;
+  }
 
   return { ...headCoordinates, column: newHeadColumn };
 }

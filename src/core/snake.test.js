@@ -82,6 +82,7 @@ describe('moveSnake', () => {
     const initialGameState = newGame(1234);
     const gameState = moveSnake(initialGameState);
     const field = selectField(gameState);
+    // Total number of squares minus food and snake squares
     expect(field.flat().filter(value => value === null)).toHaveLength(WIDTH * HEIGHT - 1 - 6);
   });
 
@@ -98,15 +99,51 @@ describe('moveSnake', () => {
     const newGameState = moveSnake(gameState);
 
     const field = selectField(newGameState);
-
     expect(field[STARTING_ROW][0]).toEqual(snakeHead());
   });
 
-  it.todo('should be able to move left');
+  it('should be able to move left', () => {
+    const startingField = createEmptyField(WIDTH, HEIGHT);
+    startingField[STARTING_ROW][13] = snakeHead();
+    startingField[STARTING_ROW][14] = snakeTrunk({ index: 0 });
+    startingField[STARTING_ROW][15] = snakeTrunk({ index: 1 });
+    startingField[STARTING_ROW][16] = snakeTrunk({ index: 2 });
+    startingField[STARTING_ROW][17] = snakeTrunk({ index: 3 });
+    startingField[STARTING_ROW][18] = snakeTail();
+    const gameState = { field: startingField, direction: 'left', snakeSize: 6 };
+
+    const newGameState = moveSnake(gameState);
+
+    const field = selectField(newGameState);
+    expect(field[STARTING_ROW][12]).toEqual(snakeHead());
+    startingField[STARTING_ROW][13] = snakeTrunk({ index: 0 });
+    startingField[STARTING_ROW][14] = snakeTrunk({ index: 1 });
+    startingField[STARTING_ROW][15] = snakeTrunk({ index: 2 });
+    startingField[STARTING_ROW][16] = snakeTrunk({ index: 3 });
+    expect(field[STARTING_ROW][17]).toEqual(snakeTail());
+    // Should not modify other squares
+    expect(field.flat().filter(value => value === null)).toHaveLength(WIDTH * HEIGHT - 6);
+  });
+
+  it('should come out the other end if it hits the left wall', () => {
+    const startingField = createEmptyField(WIDTH, HEIGHT);
+    startingField[STARTING_ROW][0] = snakeHead();
+    startingField[STARTING_ROW][1] = snakeTrunk({ index: 0 });
+    startingField[STARTING_ROW][2] = snakeTrunk({ index: 1 });
+    startingField[STARTING_ROW][3] = snakeTrunk({ index: 2 });
+    startingField[STARTING_ROW][4] = snakeTrunk({ index: 3 });
+    startingField[STARTING_ROW][5] = snakeTail();
+    const gameState = { field: startingField, direction: 'left', snakeSize: 6 };
+
+    const newGameState = moveSnake(gameState);
+
+    const field = selectField(newGameState);
+    expect(field[STARTING_ROW][WIDTH - 1]).toEqual(snakeHead());
+  });
+
   it.todo('should be able to move up');
   it.todo('should be able to move down');
 
-  it.todo('should come out the other end if it hits the left wall');
   it.todo('should come out the other end if it hits the top wall');
   it.todo('should come out the other end if it hits the bottom wall');
   it.todo('should move correctly if bent');
