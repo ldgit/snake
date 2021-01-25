@@ -4,6 +4,18 @@ import Field from './Field.svelte';
 
 let gameState;
 gameStateStore.subscribe(newGameState => (gameState = newGameState));
+document.addEventListener('keypress', function onEvent(event) {
+  const key = event.key.toLowerCase();
+  if (key === 'w') {
+    gameStateStore.changeDirection('up');
+  } else if (key === 's') {
+    gameStateStore.changeDirection('down');
+  } else if (key === 'd') {
+    gameStateStore.changeDirection('right');
+  } else if (key === 'a') {
+    gameStateStore.changeDirection('left');
+  }
+});
 setInterval(gameStateStore.moveSnake, 50);
 </script>
 
