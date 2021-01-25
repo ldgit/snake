@@ -1,10 +1,11 @@
 <script>
+import { onDestroy } from 'svelte';
 import gameStateStore from './gameStateStore';
 import Field from './Field.svelte';
 
 let gameState;
 gameStateStore.subscribe(newGameState => (gameState = newGameState));
-document.addEventListener('keypress', function onEvent(event) {
+function handleKeypress(event) {
   const key = event.key.toLowerCase();
   if (key === 'w') {
     gameStateStore.changeDirection('up');
@@ -15,8 +16,15 @@ document.addEventListener('keypress', function onEvent(event) {
   } else if (key === 'a') {
     gameStateStore.changeDirection('left');
   }
+}
+
+document.addEventListener('keypress', handleKeypress);
+const intervalId = setInterval(gameStateStore.moveSnake, 50);
+
+onDestroy(() => {
+  document.removeEventListener('keypress', handleKeypress);
+  clearInterval(intervalId);
 });
-setInterval(gameStateStore.moveSnake, 50);
 </script>
 
 <main>
