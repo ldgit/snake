@@ -29,29 +29,6 @@ export function newGame(seed = Math.floor(Math.random() * 10000000)) {
   };
 }
 
-function getNewHeadCoordinates(field, direction) {
-  const headCoordinates = findCoordinatesForSquare(
-    field,
-    square => square?.type === 'snake' && square.bodyPart === 'head',
-  );
-
-  let newHeadColumn = headCoordinates.column;
-  if (direction === 'left') {
-    newHeadColumn = headCoordinates.column - 1 < 0 ? WIDTH - 1 : headCoordinates.column - 1;
-  } else if (direction === 'right') {
-    newHeadColumn = headCoordinates.column + 1 === WIDTH ? 0 : headCoordinates.column + 1;
-  }
-
-  let newHeadRow = headCoordinates.row;
-  if (direction === 'up') {
-    newHeadRow = headCoordinates.row - 1 < 0 ? HEIGHT - 1 : headCoordinates.row - 1;
-  } else if (direction === 'down') {
-    newHeadRow = headCoordinates.row + 1 === HEIGHT ? 0 : headCoordinates.row + 1;
-  }
-
-  return { row: newHeadRow, column: newHeadColumn };
-}
-
 export function moveSnake(gameState) {
   const field = selectField(gameState);
   const snakeSize = selectSnakeSize(gameState);
@@ -90,10 +67,6 @@ export function moveSnake(gameState) {
       });
     }),
   };
-
-  // first move snake element from tail
-  // add new snake element to field in where head is (use main direction)
-  // can't change direction to go back into snake body
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -113,6 +86,29 @@ export function snakeTrunk({ index }) {
 
 export function snakeTail() {
   return { type: 'snake', bodyPart: 'tail' };
+}
+
+function getNewHeadCoordinates(field, direction) {
+  const headCoordinates = findCoordinatesForSquare(
+    field,
+    square => square?.type === 'snake' && square.bodyPart === 'head',
+  );
+
+  let newHeadColumn = headCoordinates.column;
+  if (direction === 'left') {
+    newHeadColumn = headCoordinates.column - 1 < 0 ? WIDTH - 1 : headCoordinates.column - 1;
+  } else if (direction === 'right') {
+    newHeadColumn = headCoordinates.column + 1 === WIDTH ? 0 : headCoordinates.column + 1;
+  }
+
+  let newHeadRow = headCoordinates.row;
+  if (direction === 'up') {
+    newHeadRow = headCoordinates.row - 1 < 0 ? HEIGHT - 1 : headCoordinates.row - 1;
+  } else if (direction === 'down') {
+    newHeadRow = headCoordinates.row + 1 === HEIGHT ? 0 : headCoordinates.row + 1;
+  }
+
+  return { row: newHeadRow, column: newHeadColumn };
 }
 
 /**

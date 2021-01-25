@@ -227,6 +227,11 @@ describe('moveSnake', () => {
   it.todo('should create new food when current one eaten and increase in size');
 });
 
+describe('changeDirection', () => {
+  it.todo('can change direction');
+  it.todo('changing to opposite direction has no effect');
+});
+
 // eslint-disable-next-line no-unused-vars
 function findSeed() {
   let x;
