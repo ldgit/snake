@@ -180,9 +180,45 @@ describe('moveSnake', () => {
     expect(field[HEIGHT - 1][15]).toEqual(snakeHead());
   });
 
-  it.todo('should be able to move down');
+  it('should be able to move down', () => {
+    const startingField = createEmptyField(WIDTH, HEIGHT);
+    startingField[4][15] = snakeTail();
+    startingField[5][15] = snakeTrunk({ index: 3 });
+    startingField[6][15] = snakeTrunk({ index: 2 });
+    startingField[7][15] = snakeTrunk({ index: 1 });
+    startingField[8][15] = snakeTrunk({ index: 0 });
+    startingField[9][15] = snakeHead();
+    const gameState = { field: startingField, direction: 'down', snakeSize: 6 };
 
-  it.todo('should come out the other end if it hits the bottom wall');
+    const newGameState = moveSnake(gameState);
+
+    const field = selectField(newGameState);
+    expect(field[5][15]).toEqual(snakeTail());
+    expect(field[6][15]).toEqual(snakeTrunk({ index: 3 }));
+    expect(field[7][15]).toEqual(snakeTrunk({ index: 2 }));
+    expect(field[8][15]).toEqual(snakeTrunk({ index: 1 }));
+    expect(field[9][15]).toEqual(snakeTrunk({ index: 0 }));
+    expect(field[10][15]).toEqual(snakeHead());
+    // Should not modify other squares
+    expect(field.flat().filter(value => value === null)).toHaveLength(WIDTH * HEIGHT - 6);
+  });
+
+  it('should come out the other end if it hits the bottom wall', () => {
+    const startingField = createEmptyField(WIDTH, HEIGHT);
+    startingField[HEIGHT - 6][15] = snakeTail();
+    startingField[HEIGHT - 5][15] = snakeTrunk({ index: 3 });
+    startingField[HEIGHT - 4][15] = snakeTrunk({ index: 2 });
+    startingField[HEIGHT - 3][15] = snakeTrunk({ index: 1 });
+    startingField[HEIGHT - 2][15] = snakeTrunk({ index: 0 });
+    startingField[HEIGHT - 1][15] = snakeHead();
+    const gameState = { field: startingField, direction: 'down', snakeSize: 6 };
+
+    const newGameState = moveSnake(gameState);
+
+    const field = selectField(newGameState);
+    expect(field[0][15]).toEqual(snakeHead());
+  });
+
   it.todo('should move correctly if bent');
 
   it.todo('can crash into itself');

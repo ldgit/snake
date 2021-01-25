@@ -29,7 +29,6 @@ export function newGame(seed = Math.floor(Math.random() * 10000000)) {
   };
 }
 
-// eslint-disable-next-line no-unused-vars
 function getNewHeadCoordinates(field, direction) {
   const headCoordinates = findCoordinatesForSquare(
     field,
@@ -46,6 +45,8 @@ function getNewHeadCoordinates(field, direction) {
   let newHeadRow = headCoordinates.row;
   if (direction === 'up') {
     newHeadRow = headCoordinates.row - 1 < 0 ? HEIGHT - 1 : headCoordinates.row - 1;
+  } else if (direction === 'down') {
+    newHeadRow = headCoordinates.row + 1 === HEIGHT ? 0 : headCoordinates.row + 1;
   }
 
   return { row: newHeadRow, column: newHeadColumn };
