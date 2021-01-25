@@ -36,6 +36,8 @@ function getSquareClasses(square) {
   border: 3px solid black;
   max-width: 1200px;
   width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+    'Helvetica Neue', sans-serif;
 }
 
 .square {
