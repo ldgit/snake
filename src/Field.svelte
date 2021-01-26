@@ -27,22 +27,20 @@ function getSquareClasses(square) {
 <style>
 .snakeBox {
   display: grid;
-  grid-template-columns: repeat(var(--width), 1fr);
-  grid-template-rows: repeat(var(--height), 1fr);
+  grid-template-columns: repeat(var(--width), 3.6vh);
+  grid-template-rows: repeat(var(--height), 3.6vh);
   place-items: center center;
-  gap: 3px 3px;
-  padding: 3px;
-  flex-grow: 5;
+  gap: 0.15vh 0.15vh;
+  padding: 0.15vh;
   border: 3px solid black;
-  max-width: 1200px;
-  width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell,
     'Helvetica Neue', sans-serif;
 }
 
 .square {
   font-size: 8px;
-  background-color: white;
+  width: 3.4vh;
+  height: 3.4vh;
 }
 
 .snake {
@@ -50,24 +48,24 @@ function getSquareClasses(square) {
 }
 
 .head {
-  width: 100%;
-  height: 100%;
+  width: 3.4vh;
+  height: 3.4vh;
 }
 
 .trunk {
-  width: 90%;
-  height: 90%;
+  width: 3.1vh;
+  height: 3.1vh;
 }
 
 .tail {
-  width: 70%;
-  height: 70%;
+  width: 2.5vh;
+  height: 2.5vh;
 }
 
 .food {
   background-color: #ff3e00;
   border-radius: 50%;
-  width: 80%;
-  height: 80%;
+  width: 3vh;
+  height: 3vh;
 }
 </style>
