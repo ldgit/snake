@@ -2,7 +2,7 @@
 import { onDestroy } from 'svelte';
 import gameStateStore from './gameStateStore';
 import Field from './Field.svelte';
-import Controls from './Controls.svelte';
+import Settings from './Settings.svelte';
 
 let gameState;
 let delay;
@@ -38,7 +38,7 @@ onDestroy(() => {
 <main>
   <h1>Snake</h1>
   <Field {gameState} />
-  <Controls bind:delay />
+  <Settings bind:delay />
 </main>
 
 <style>
