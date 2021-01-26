@@ -21,52 +21,64 @@ export function newGame(seed = Math.floor(Math.random() * 10000000)) {
   field[STARTING_ROW][18] = snakeHead();
 
   const foodCoordinates = generateFoodCoordinates(seed, field);
-  field[foodCoordinates.x][foodCoordinates.y] = { type: 'food' };
+  field[foodCoordinates.x][foodCoordinates.y] = food();
 
   return {
     field,
     direction: 'right',
     snakeSize: 6,
+    foodConsumed: false,
   };
 }
 
 export function moveSnake(gameState) {
   const field = selectField(gameState);
   const snakeSize = selectSnakeSize(gameState);
-
   const newHeadCoordinates = getNewHeadCoordinates(field, selectDirection(gameState));
+  let foodConsumedOnThisMove = false;
+
+  const newField = field.map((row, rowIndex) => {
+    return row.map((square, columnIndex) => {
+      // Tail moves away
+      if (square?.type === 'snake' && square.bodyPart === 'tail') {
+        return null;
+      }
+      // Head becomes trunk
+      if (square?.type === 'snake' && square.bodyPart === 'head') {
+        return snakeTrunk({ index: 0 });
+      }
+      if (square?.type === 'snake' && square.bodyPart === 'trunk') {
+        // Last trunk element is now a tail
+        if (square.index === snakeSize - 3) {
+          return snakeTail();
+        }
+
+        return snakeTrunk({ index: square.index + 1 });
+      }
+      if (
+        (square === null || square.type === 'food') &&
+        columnIndex === newHeadCoordinates.column &&
+        rowIndex === newHeadCoordinates.row
+      ) {
+        if (square) {
+          foodConsumedOnThisMove = square.type === 'food';
+        }
+        return snakeHead();
+      }
+
+      return square;
+    });
+  });
+
+  if (gameState.foodConsumed) {
+    const foodCoordinates = generateFoodCoordinates(Math.floor(Math.random() * 10000000), field);
+    newField[foodCoordinates.x][foodCoordinates.y] = food();
+  }
 
   return {
     ...gameState,
-    field: field.map((row, rowIndex) => {
-      return row.map((square, columnIndex) => {
-        // Tail moves away
-        if (square?.type === 'snake' && square.bodyPart === 'tail') {
-          return null;
-        }
-        // Head becomes trunk
-        if (square?.type === 'snake' && square.bodyPart === 'head') {
-          return snakeTrunk({ index: 0 });
-        }
-        if (square?.type === 'snake' && square.bodyPart === 'trunk') {
-          // Last trunk element is now a tail
-          if (square.index === snakeSize - 3) {
-            return snakeTail();
-          }
-
-          return snakeTrunk({ index: square.index + 1 });
-        }
-        if (
-          square === null &&
-          columnIndex === newHeadCoordinates.column &&
-          rowIndex === newHeadCoordinates.row
-        ) {
-          return snakeHead();
-        }
-
-        return square;
-      });
-    }),
+    foodConsumed: foodConsumedOnThisMove,
+    field: newField,
   };
 }
 
@@ -93,6 +105,10 @@ export function snakeTrunk({ index }) {
 
 export function snakeTail() {
   return { type: 'snake', bodyPart: 'tail' };
+}
+
+export function food() {
+  return { type: 'food' };
 }
 
 function getNewHeadCoordinates(field, direction) {

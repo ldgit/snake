@@ -6,8 +6,15 @@ import {
   snakeHead,
   snakeTrunk,
   changeDirection,
+  food,
 } from './snake';
-import { createRandomNumberGenerator, WIDTH, HEIGHT, STARTING_ROW } from './utils';
+import {
+  createRandomNumberGenerator,
+  WIDTH,
+  HEIGHT,
+  STARTING_ROW,
+  findCoordinatesForSquare,
+} from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 
 describe('newGame', () => {
@@ -44,6 +51,7 @@ describe('newGame', () => {
     (seed, { row, column }) => {
       const gameState = newGame(seed);
       expect(selectField(gameState)[row][column]).toEqual({ type: 'food' });
+      expect(gameState.foodConsumed).toStrictEqual(false);
     },
   );
 });
@@ -69,6 +77,7 @@ describe('moveSnake', () => {
     expect(selectDirection(gameState1)).toEqual('right');
     // Food is not moved
     expect(field1[5][17]).toEqual({ type: 'food' });
+    expect(gameState1.foodConsumed).toStrictEqual(false);
 
     const gameState2 = moveSnake(gameState1);
     const field2 = selectField(gameState2);
@@ -84,6 +93,7 @@ describe('moveSnake', () => {
     expect(selectDirection(gameState2)).toEqual('right');
     // Food is not moved
     expect(selectField(gameState2)[5][17]).toEqual({ type: 'food' });
+    expect(gameState2.foodConsumed).toStrictEqual(false);
   });
 
   it('should not modify other squares', () => {
@@ -227,12 +237,46 @@ describe('moveSnake', () => {
     expect(field[0][15]).toEqual(snakeHead());
   });
 
-  it.todo('should move correctly if bent');
+  it('should eat food when it moves onto it and increase in size', () => {
+    const startingField = createEmptyField(WIDTH, HEIGHT);
+    startingField[STARTING_ROW][4] = snakeTail();
+    startingField[STARTING_ROW][5] = snakeTrunk({ index: 3 });
+    startingField[STARTING_ROW][6] = snakeTrunk({ index: 2 });
+    startingField[STARTING_ROW][7] = snakeTrunk({ index: 1 });
+    startingField[STARTING_ROW][8] = snakeTrunk({ index: 0 });
+    startingField[STARTING_ROW][9] = snakeHead();
+    startingField[STARTING_ROW][10] = food();
+    const gameState = {
+      field: startingField,
+      direction: 'right',
+      snakeSize: 6,
+      foodConsumed: false,
+    };
+
+    const foodConsumedGameState = moveSnake(gameState);
+
+    // Snake moves forward without growing
+    expect(selectField(foodConsumedGameState)[STARTING_ROW][5]).toEqual(snakeTail());
+    expect(selectField(foodConsumedGameState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 3 }));
+    expect(selectField(foodConsumedGameState)[STARTING_ROW][7]).toEqual(snakeTrunk({ index: 2 }));
+    expect(selectField(foodConsumedGameState)[STARTING_ROW][8]).toEqual(snakeTrunk({ index: 1 }));
+    expect(selectField(foodConsumedGameState)[STARTING_ROW][9]).toEqual(snakeTrunk({ index: 0 }));
+    expect(selectField(foodConsumedGameState)[STARTING_ROW][10]).toEqual(snakeHead());
+    expect(foodConsumedGameState.foodConsumed).toStrictEqual(true);
+
+    // Another food square must be created on next iteration, at another location
+    const newFoodGameState = moveSnake(foodConsumedGameState);
+    expect(newFoodGameState.foodConsumed).toStrictEqual(false);
+    expect(
+      findCoordinatesForSquare(selectField(newFoodGameState), square => square?.type === 'food'),
+    ).toBeTruthy();
+  });
+
+  it.todo('should handle two food in a row correctly');
+
+  it.todo('should create new food when current one eaten and increase in size');
 
   it.todo('can crash into itself');
-
-  it.todo('should eat food when it moves onto it and increase in size');
-  it.todo('should create new food when current one eaten and increase in size');
 });
 
 describe('changeDirection', () => {
