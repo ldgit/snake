@@ -255,13 +255,20 @@ describe('moveSnake', () => {
 
     const foodConsumedGameState = moveSnake(gameState);
 
-    // Snake moves forward without growing
+    // Snake moves forward without growing and food is gone
     expect(selectField(foodConsumedGameState)[STARTING_ROW][5]).toEqual(snakeTail());
     expect(selectField(foodConsumedGameState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 3 }));
     expect(selectField(foodConsumedGameState)[STARTING_ROW][7]).toEqual(snakeTrunk({ index: 2 }));
     expect(selectField(foodConsumedGameState)[STARTING_ROW][8]).toEqual(snakeTrunk({ index: 1 }));
     expect(selectField(foodConsumedGameState)[STARTING_ROW][9]).toEqual(snakeTrunk({ index: 0 }));
     expect(selectField(foodConsumedGameState)[STARTING_ROW][10]).toEqual(snakeHead());
+    expect(selectSnakeSize(foodConsumedGameState)).toEqual(6);
+    expect(
+      findCoordinatesForSquare(
+        selectField(foodConsumedGameState),
+        square => square?.type === 'food',
+      ),
+    ).toBeFalsy();
     expect(foodConsumedGameState.foodConsumed).toStrictEqual(true);
 
     // Another food square must be created on next iteration, at another location
@@ -270,6 +277,14 @@ describe('moveSnake', () => {
     expect(
       findCoordinatesForSquare(selectField(newFoodGameState), square => square?.type === 'food'),
     ).toBeTruthy();
+    expect(selectField(newFoodGameState)[STARTING_ROW][5]).toEqual(snakeTail());
+    expect(selectField(newFoodGameState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 4 }));
+    expect(selectField(newFoodGameState)[STARTING_ROW][7]).toEqual(snakeTrunk({ index: 3 }));
+    expect(selectField(newFoodGameState)[STARTING_ROW][8]).toEqual(snakeTrunk({ index: 2 }));
+    expect(selectField(newFoodGameState)[STARTING_ROW][9]).toEqual(snakeTrunk({ index: 1 }));
+    expect(selectField(newFoodGameState)[STARTING_ROW][10]).toEqual(snakeTrunk({ index: 0 }));
+    expect(selectField(newFoodGameState)[STARTING_ROW][11]).toEqual(snakeHead());
+    expect(selectSnakeSize(newFoodGameState)).toEqual(7);
   });
 
   it.todo('should handle two food in a row correctly');

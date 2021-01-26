@@ -39,17 +39,17 @@ export function moveSnake(gameState) {
 
   const newField = field.map((row, rowIndex) => {
     return row.map((square, columnIndex) => {
-      // Tail moves away
+      // Tail moves away unless food was consumed on previous move
       if (square?.type === 'snake' && square.bodyPart === 'tail') {
-        return null;
+        return gameState.foodConsumed ? square : null;
       }
       // Head becomes trunk
       if (square?.type === 'snake' && square.bodyPart === 'head') {
         return snakeTrunk({ index: 0 });
       }
       if (square?.type === 'snake' && square.bodyPart === 'trunk') {
-        // Last trunk element is now a tail
-        if (square.index === snakeSize - 3) {
+        // Last trunk element is now a tail unless food was consumed on previous move
+        if (square.index === snakeSize - 3 && !gameState.foodConsumed) {
           return snakeTail();
         }
 
@@ -79,6 +79,7 @@ export function moveSnake(gameState) {
     ...gameState,
     foodConsumed: foodConsumedOnThisMove,
     field: newField,
+    snakeSize: gameState.foodConsumed ? gameState.snakeSize + 1 : gameState.snakeSize,
   };
 }
 
