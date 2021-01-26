@@ -47,15 +47,12 @@ main {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 240px;
-  margin: 0 auto;
-  height: 100%;
 }
 
 h1 {
   color: #ff3e00;
   text-transform: uppercase;
-  font-size: 4em;
+  font-size: 8vh;
   font-weight: 100;
 }
 
