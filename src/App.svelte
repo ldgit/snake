@@ -6,27 +6,34 @@ import Settings from './Settings.svelte';
 
 let gameState;
 let delay;
+let commandQueue = [];
 
 gameStateStore.subscribe(newGameState => (gameState = newGameState));
 function handleKeypress(event) {
   const key = event.key.toLowerCase();
   if (key === 'w') {
-    gameStateStore.changeDirection('up');
+    commandQueue.push('up');
   } else if (key === 's') {
-    gameStateStore.changeDirection('down');
+    commandQueue.push('down');
   } else if (key === 'd') {
-    gameStateStore.changeDirection('right');
+    commandQueue.push('right');
   } else if (key === 'a') {
-    gameStateStore.changeDirection('left');
+    commandQueue.push('left');
   }
 }
 
 document.addEventListener('keypress', handleKeypress);
-let intervalId = setInterval(gameStateStore.moveSnake, delay);
+let intervalId = setInterval(() => {
+  gameStateStore.changeDirection(commandQueue.shift());
+  gameStateStore.moveSnake();
+}, delay);
 
 $: {
   clearInterval(intervalId);
-  intervalId = setInterval(gameStateStore.moveSnake, delay);
+  intervalId = setInterval(() => {
+    gameStateStore.changeDirection(commandQueue.shift());
+    gameStateStore.moveSnake();
+  }, delay);
 }
 
 onDestroy(() => {

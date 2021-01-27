@@ -7,8 +7,12 @@ function createGameStateStore() {
   return {
     subscribe,
     moveSnake: () => update(previousGameState => moveSnake(previousGameState)),
-    changeDirection: direction =>
-      update(previousGameState => changeDirection(previousGameState, direction)),
+    changeDirection: direction => {
+      if (!direction) {
+        return;
+      }
+      update(previousGameState => changeDirection(previousGameState, direction));
+    },
   };
 }
 
