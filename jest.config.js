@@ -3,7 +3,7 @@
  * https://jestjs.io/docs/en/configuration.html
  */
 
-export default {
+module.exports = {
   automock: false,
 
   // Stop running tests after `n` failures
@@ -69,16 +69,6 @@ export default {
   //   "node_modules"
   // ],
 
-  // An array of file extensions your modules use
-  // moduleFileExtensions: [
-  //   "js",
-  //   "json",
-  //   "jsx",
-  //   "ts",
-  //   "tsx",
-  //   "node"
-  // ],
-
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   // moduleNameMapper: {},
 
@@ -126,9 +116,6 @@ export default {
   // The paths to modules that run some code to configure or set up the testing environment before each test
   // setupFiles: [],
 
-  // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
-
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
 
@@ -170,9 +157,6 @@ export default {
   // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
   // timers: "real",
 
-  // A map from regular expressions to paths to transformers
-  // transform: {},
-
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
   //   "/node_modules/",
@@ -190,4 +174,11 @@ export default {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+
+  transform: {
+    '^.+\\.js$': 'babel-jest',
+    '^.+\\.svelte$': 'svelte-jester',
+  },
+  moduleFileExtensions: ['js', 'svelte'],
+  setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
 };
