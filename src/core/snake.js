@@ -28,6 +28,7 @@ export function newGame(seed = Math.floor(Math.random() * 10000000)) {
     direction: 'right',
     snakeSize: 6,
     foodConsumed: false,
+    gameOver: false,
   };
 }
 
@@ -35,12 +36,23 @@ export function moveSnake(gameState) {
   const field = selectField(gameState);
   const snakeSize = selectSnakeSize(gameState);
   const newHeadCoordinates = getNewHeadCoordinates(field, selectDirection(gameState));
+
+  if (
+    field[newHeadCoordinates.row][newHeadCoordinates.column]?.type === 'snake' &&
+    field[newHeadCoordinates.row][newHeadCoordinates.column].bodyPart != 'tail'
+  ) {
+    return { ...gameState, gameOver: true };
+  }
+
   let foodConsumedOnThisMove = false;
 
   const newField = field.map((row, rowIndex) => {
     return row.map((square, columnIndex) => {
       // Tail moves away unless food was consumed on previous move
       if (square?.type === 'snake' && square.bodyPart === 'tail') {
+        if (newHeadCoordinates.row === rowIndex && newHeadCoordinates.column === columnIndex) {
+          return snakeHead();
+        }
         return gameState.foodConsumed ? square : null;
       }
       // Head becomes trunk
