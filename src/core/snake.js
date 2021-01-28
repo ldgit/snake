@@ -8,6 +8,7 @@ import {
   areOpposite,
 } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
+import { v4 as uuidv4 } from 'uuid';
 
 const flattenedCoordinatesField = createFlattenedCoordinatesField(HEIGHT, WIDTH);
 
@@ -51,31 +52,31 @@ export function moveSnake(gameState) {
       // Tail moves away unless food was consumed on previous move
       if (square?.type === 'snake' && square.bodyPart === 'tail') {
         if (newHeadCoordinates.row === rowIndex && newHeadCoordinates.column === columnIndex) {
-          return snakeHead();
+          return { ...snakeHead(), id: square.id };
         }
-        return gameState.foodConsumed ? square : null;
+        return gameState.foodConsumed ? square : { ...emptySquare(), id: square.id };
       }
       // Head becomes trunk
       if (square?.type === 'snake' && square.bodyPart === 'head') {
-        return snakeTrunk({ index: 0 });
+        return { ...snakeTrunk({ index: 0 }), id: square.id };
       }
       if (square?.type === 'snake' && square.bodyPart === 'trunk') {
         // Last trunk element is now a tail unless food was consumed on previous move
         if (square.index === snakeSize - 3 && !gameState.foodConsumed) {
-          return snakeTail();
+          return { ...snakeTail(), id: square.id };
         }
 
-        return snakeTrunk({ index: square.index + 1 });
+        return { ...snakeTrunk({ index: square.index + 1 }), id: square.id };
       }
       if (
-        (square === null || square.type === 'food') &&
+        (square.type === 'empty' || square.type === 'food') &&
         columnIndex === newHeadCoordinates.column &&
         rowIndex === newHeadCoordinates.row
       ) {
         if (square) {
           foodConsumedOnThisMove = square.type === 'food';
         }
-        return snakeHead();
+        return { ...snakeHead(), id: square.id };
       }
 
       return square;
@@ -84,7 +85,10 @@ export function moveSnake(gameState) {
 
   if (gameState.foodConsumed) {
     const foodCoordinates = generateFoodCoordinates(Math.floor(Math.random() * 10000000), field);
-    newField[foodCoordinates.x][foodCoordinates.y] = food();
+    newField[foodCoordinates.x][foodCoordinates.y] = {
+      ...food(),
+      id: newField[foodCoordinates.x][foodCoordinates.y].id,
+    };
   }
 
   return {
@@ -105,23 +109,29 @@ export function changeDirection(gameState, newDirection) {
 }
 
 export function createEmptyField(width, height) {
-  return new Array(height).fill(null).map(() => new Array(width).fill(null));
+  return new Array(height)
+    .fill(null)
+    .map(() => new Array(width).fill(null).map(() => emptySquare()));
 }
 
 export function snakeHead() {
-  return { type: 'snake', bodyPart: 'head' };
+  return { type: 'snake', bodyPart: 'head', id: uuidv4() };
 }
 
 export function snakeTrunk({ index }) {
-  return { type: 'snake', bodyPart: 'trunk', index };
+  return { type: 'snake', bodyPart: 'trunk', index, id: uuidv4() };
 }
 
 export function snakeTail() {
-  return { type: 'snake', bodyPart: 'tail' };
+  return { type: 'snake', bodyPart: 'tail', id: uuidv4() };
 }
 
 export function food() {
-  return { type: 'food' };
+  return { type: 'food', id: uuidv4() };
+}
+
+export function emptySquare() {
+  return { type: 'empty', id: uuidv4() };
 }
 
 function getNewHeadCoordinates(field, direction) {

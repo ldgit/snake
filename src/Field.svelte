@@ -18,7 +18,7 @@ function getSquareClasses(square) {
 
 <div class="snakeBox" style="--width: {WIDTH}; --height: {HEIGHT};">
   {#each gameState.field as row}
-    {#each row as square}
+    {#each row as square (square.id)}
       <div class="square {getSquareClasses(square)}" />
     {/each}
   {/each}

@@ -30,17 +30,22 @@ describe('newGame', () => {
       const gameState = newGame();
       const field = selectField(gameState);
       // Note: Snake body part helpers not used on purpose, to test them
-      expect(field[STARTING_ROW][13]).toEqual({ type: 'snake', bodyPart: 'tail' });
-      expect(field[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
-      expect(field[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
-      expect(field[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
-      expect(field[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
-      expect(field[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'head' });
+      expectSquare(field[STARTING_ROW][13]).toEqual({ type: 'snake', bodyPart: 'tail' });
+      expectSquare(field[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
+      expectSquare(field[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
+      expectSquare(field[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
+      expectSquare(field[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
+      expectSquare(field[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'head' });
       expect(selectDirection(gameState)).toEqual('right');
       expect(selectSnakeSize(gameState)).toEqual(6);
       // There should be only one food placed on the field
       expect(field.flat().filter(value => value?.type === 'food')).toHaveLength(1);
     }
+  });
+
+  it('should assign an unique id to each square', () => {
+    const field = selectField(newGame());
+    expect(field.flat().filter(value => value?.id)).toHaveLength(WIDTH * HEIGHT);
   });
 
   it.each([
@@ -50,7 +55,7 @@ describe('newGame', () => {
     'should pick a random spot in the field for snake food (seed: %s, coordinates: %s)',
     (seed, { row, column }) => {
       const gameState = newGame(seed);
-      expect(selectField(gameState)[row][column]).toEqual({ type: 'food' });
+      expectSquare(selectField(gameState)[row][column]).toEqual({ type: 'food' });
       expect(gameState.foodConsumed).toStrictEqual(false);
     },
   );
@@ -63,36 +68,36 @@ describe('moveSnake', () => {
     const gameState1 = moveSnake(initialGameState);
     expect(selectSnakeSize(gameState1)).toEqual(6);
     const field1 = selectField(gameState1);
-    expect(field1[STARTING_ROW][13]).toBeNull();
+    expectSquare(field1[STARTING_ROW][13]).toBeEmpty();
     // Note: Snake body part helpers not used on purpose, to test them
     // Original head is now a trunk
-    expect(field1[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
-    expect(field1[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
-    expect(field1[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
-    expect(field1[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
+    expectSquare(field1[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
+    expectSquare(field1[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
+    expectSquare(field1[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
+    expectSquare(field1[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
     // Last snake trunk element is now a tail
-    expect(field1[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'tail' });
+    expectSquare(field1[STARTING_ROW][14]).toEqual({ type: 'snake', bodyPart: 'tail' });
     // Head moves forward
-    expect(field1[STARTING_ROW][19]).toEqual({ type: 'snake', bodyPart: 'head' });
+    expectSquare(field1[STARTING_ROW][19]).toEqual({ type: 'snake', bodyPart: 'head' });
     expect(selectDirection(gameState1)).toEqual('right');
     // Food is not moved
-    expect(field1[5][17]).toEqual({ type: 'food' });
+    expectSquare(field1[5][17]).toEqual({ type: 'food' });
     expect(gameState1.foodConsumed).toStrictEqual(false);
 
     const gameState2 = moveSnake(gameState1);
     const field2 = selectField(gameState2);
-    expect(field2[STARTING_ROW][13]).toBeNull();
-    expect(field2[STARTING_ROW][14]).toBeNull();
+    expectSquare(field2[STARTING_ROW][13]).toBeEmpty();
+    expectSquare(field2[STARTING_ROW][14]).toBeEmpty();
     // Original head is now a trunk
-    expect(field2[STARTING_ROW][19]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
-    expect(field2[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'tail' });
-    expect(field2[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
-    expect(field2[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
-    expect(field2[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
-    expect(field2[STARTING_ROW][20]).toEqual({ type: 'snake', bodyPart: 'head' });
+    expectSquare(field2[STARTING_ROW][19]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 0 });
+    expectSquare(field2[STARTING_ROW][15]).toEqual({ type: 'snake', bodyPart: 'tail' });
+    expectSquare(field2[STARTING_ROW][16]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 3 });
+    expectSquare(field2[STARTING_ROW][17]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 2 });
+    expectSquare(field2[STARTING_ROW][18]).toEqual({ type: 'snake', bodyPart: 'trunk', index: 1 });
+    expectSquare(field2[STARTING_ROW][20]).toEqual({ type: 'snake', bodyPart: 'head' });
     expect(selectDirection(gameState2)).toEqual('right');
     // Food is not moved
-    expect(selectField(gameState2)[5][17]).toEqual({ type: 'food' });
+    expectSquare(selectField(gameState2)[5][17]).toEqual({ type: 'food' });
     expect(gameState2.foodConsumed).toStrictEqual(false);
   });
 
@@ -101,7 +106,9 @@ describe('moveSnake', () => {
     const gameState = moveSnake(initialGameState);
     const field = selectField(gameState);
     // Total number of squares minus food and snake squares
-    expect(field.flat().filter(value => value === null)).toHaveLength(WIDTH * HEIGHT - 1 - 6);
+    expect(field.flat().filter(({ type }) => type === 'empty')).toHaveLength(
+      WIDTH * HEIGHT - 1 - 6,
+    );
   });
 
   it('should come out the other end if it hits the right wall', () => {
@@ -117,7 +124,7 @@ describe('moveSnake', () => {
     const newGameState = moveSnake(gameState);
 
     const field = selectField(newGameState);
-    expect(field[STARTING_ROW][0]).toEqual(snakeHead());
+    expectSquare(field[STARTING_ROW][0]).toEqual(snakeHead());
   });
 
   it('should be able to move left', () => {
@@ -133,14 +140,14 @@ describe('moveSnake', () => {
     const newGameState = moveSnake(gameState);
 
     const field = selectField(newGameState);
-    expect(field[STARTING_ROW][12]).toEqual(snakeHead());
-    expect(field[STARTING_ROW][13]).toEqual(snakeTrunk({ index: 0 }));
-    expect(field[STARTING_ROW][14]).toEqual(snakeTrunk({ index: 1 }));
-    expect(field[STARTING_ROW][15]).toEqual(snakeTrunk({ index: 2 }));
-    expect(field[STARTING_ROW][16]).toEqual(snakeTrunk({ index: 3 }));
-    expect(field[STARTING_ROW][17]).toEqual(snakeTail());
+    expectSquare(field[STARTING_ROW][12]).toEqual(snakeHead());
+    expectSquare(field[STARTING_ROW][13]).toEqual(snakeTrunk({ index: 0 }));
+    expectSquare(field[STARTING_ROW][14]).toEqual(snakeTrunk({ index: 1 }));
+    expectSquare(field[STARTING_ROW][15]).toEqual(snakeTrunk({ index: 2 }));
+    expectSquare(field[STARTING_ROW][16]).toEqual(snakeTrunk({ index: 3 }));
+    expectSquare(field[STARTING_ROW][17]).toEqual(snakeTail());
     // Should not modify other squares
-    expect(field.flat().filter(value => value === null)).toHaveLength(WIDTH * HEIGHT - 6);
+    expect(field.flat().filter(({ type }) => type === 'empty')).toHaveLength(WIDTH * HEIGHT - 6);
   });
 
   it('should come out the other end if it hits the left wall', () => {
@@ -156,7 +163,7 @@ describe('moveSnake', () => {
     const newGameState = moveSnake(gameState);
 
     const field = selectField(newGameState);
-    expect(field[STARTING_ROW][WIDTH - 1]).toEqual(snakeHead());
+    expectSquare(field[STARTING_ROW][WIDTH - 1]).toEqual(snakeHead());
   });
 
   it('should be able to move up', () => {
@@ -172,14 +179,14 @@ describe('moveSnake', () => {
     const newGameState = moveSnake(gameState);
 
     const field = selectField(newGameState);
-    expect(field[3][15]).toEqual(snakeHead());
-    expect(field[4][15]).toEqual(snakeTrunk({ index: 0 }));
-    expect(field[5][15]).toEqual(snakeTrunk({ index: 1 }));
-    expect(field[6][15]).toEqual(snakeTrunk({ index: 2 }));
-    expect(field[7][15]).toEqual(snakeTrunk({ index: 3 }));
-    expect(field[8][15]).toEqual(snakeTail());
+    expectSquare(field[3][15]).toEqual(snakeHead());
+    expectSquare(field[4][15]).toEqual(snakeTrunk({ index: 0 }));
+    expectSquare(field[5][15]).toEqual(snakeTrunk({ index: 1 }));
+    expectSquare(field[6][15]).toEqual(snakeTrunk({ index: 2 }));
+    expectSquare(field[7][15]).toEqual(snakeTrunk({ index: 3 }));
+    expectSquare(field[8][15]).toEqual(snakeTail());
     // Should not modify other squares
-    expect(field.flat().filter(value => value === null)).toHaveLength(WIDTH * HEIGHT - 6);
+    expect(field.flat().filter(({ type }) => type === 'empty')).toHaveLength(WIDTH * HEIGHT - 6);
   });
 
   it('should come out the other end if it hits the top wall', () => {
@@ -195,7 +202,7 @@ describe('moveSnake', () => {
     const newGameState = moveSnake(gameState);
 
     const field = selectField(newGameState);
-    expect(field[HEIGHT - 1][15]).toEqual(snakeHead());
+    expectSquare(field[HEIGHT - 1][15]).toEqual(snakeHead());
   });
 
   it('should be able to move down', () => {
@@ -211,14 +218,14 @@ describe('moveSnake', () => {
     const newGameState = moveSnake(gameState);
 
     const field = selectField(newGameState);
-    expect(field[5][15]).toEqual(snakeTail());
-    expect(field[6][15]).toEqual(snakeTrunk({ index: 3 }));
-    expect(field[7][15]).toEqual(snakeTrunk({ index: 2 }));
-    expect(field[8][15]).toEqual(snakeTrunk({ index: 1 }));
-    expect(field[9][15]).toEqual(snakeTrunk({ index: 0 }));
-    expect(field[10][15]).toEqual(snakeHead());
+    expectSquare(field[5][15]).toEqual(snakeTail());
+    expectSquare(field[6][15]).toEqual(snakeTrunk({ index: 3 }));
+    expectSquare(field[7][15]).toEqual(snakeTrunk({ index: 2 }));
+    expectSquare(field[8][15]).toEqual(snakeTrunk({ index: 1 }));
+    expectSquare(field[9][15]).toEqual(snakeTrunk({ index: 0 }));
+    expectSquare(field[10][15]).toEqual(snakeHead());
     // Should not modify other squares
-    expect(field.flat().filter(value => value === null)).toHaveLength(WIDTH * HEIGHT - 6);
+    expect(field.flat().filter(({ type }) => type === 'empty')).toHaveLength(WIDTH * HEIGHT - 6);
   });
 
   it('should come out the other end if it hits the bottom wall', () => {
@@ -234,7 +241,7 @@ describe('moveSnake', () => {
     const newGameState = moveSnake(gameState);
 
     const field = selectField(newGameState);
-    expect(field[0][15]).toEqual(snakeHead());
+    expectSquare(field[0][15]).toEqual(snakeHead());
   });
 
   it('should eat food when it moves onto it and increase in size', () => {
@@ -252,16 +259,25 @@ describe('moveSnake', () => {
       snakeSize: 6,
       foodConsumed: false,
     };
+    const originalIds = startingField.flat().map(value => value.id);
 
     const foodConsumedGameState = moveSnake(gameState);
 
     // Snake moves forward without growing and food is gone
-    expect(selectField(foodConsumedGameState)[STARTING_ROW][5]).toEqual(snakeTail());
-    expect(selectField(foodConsumedGameState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 3 }));
-    expect(selectField(foodConsumedGameState)[STARTING_ROW][7]).toEqual(snakeTrunk({ index: 2 }));
-    expect(selectField(foodConsumedGameState)[STARTING_ROW][8]).toEqual(snakeTrunk({ index: 1 }));
-    expect(selectField(foodConsumedGameState)[STARTING_ROW][9]).toEqual(snakeTrunk({ index: 0 }));
-    expect(selectField(foodConsumedGameState)[STARTING_ROW][10]).toEqual(snakeHead());
+    expectSquare(selectField(foodConsumedGameState)[STARTING_ROW][5]).toEqual(snakeTail());
+    expectSquare(selectField(foodConsumedGameState)[STARTING_ROW][6]).toEqual(
+      snakeTrunk({ index: 3 }),
+    );
+    expectSquare(selectField(foodConsumedGameState)[STARTING_ROW][7]).toEqual(
+      snakeTrunk({ index: 2 }),
+    );
+    expectSquare(selectField(foodConsumedGameState)[STARTING_ROW][8]).toEqual(
+      snakeTrunk({ index: 1 }),
+    );
+    expectSquare(selectField(foodConsumedGameState)[STARTING_ROW][9]).toEqual(
+      snakeTrunk({ index: 0 }),
+    );
+    expectSquare(selectField(foodConsumedGameState)[STARTING_ROW][10]).toEqual(snakeHead());
     expect(selectSnakeSize(foodConsumedGameState)).toEqual(6);
     expect(
       findCoordinatesForSquare(
@@ -270,6 +286,11 @@ describe('moveSnake', () => {
       ),
     ).toBeFalsy();
     expect(foodConsumedGameState.foodConsumed).toStrictEqual(true);
+    expect(
+      selectField(foodConsumedGameState)
+        .flat()
+        .map(value => value.id),
+    ).toEqual(originalIds);
 
     // Another food square must be created on next iteration, at another location
     const newFoodGameState = moveSnake(foodConsumedGameState);
@@ -278,14 +299,19 @@ describe('moveSnake', () => {
       findCoordinatesForSquare(selectField(newFoodGameState), square => square?.type === 'food'),
     ).toBeTruthy();
     // Snake increases in size
-    expect(selectField(newFoodGameState)[STARTING_ROW][5]).toEqual(snakeTail());
-    expect(selectField(newFoodGameState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 4 }));
-    expect(selectField(newFoodGameState)[STARTING_ROW][7]).toEqual(snakeTrunk({ index: 3 }));
-    expect(selectField(newFoodGameState)[STARTING_ROW][8]).toEqual(snakeTrunk({ index: 2 }));
-    expect(selectField(newFoodGameState)[STARTING_ROW][9]).toEqual(snakeTrunk({ index: 1 }));
-    expect(selectField(newFoodGameState)[STARTING_ROW][10]).toEqual(snakeTrunk({ index: 0 }));
-    expect(selectField(newFoodGameState)[STARTING_ROW][11]).toEqual(snakeHead());
+    expectSquare(selectField(newFoodGameState)[STARTING_ROW][5]).toEqual(snakeTail());
+    expectSquare(selectField(newFoodGameState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 4 }));
+    expectSquare(selectField(newFoodGameState)[STARTING_ROW][7]).toEqual(snakeTrunk({ index: 3 }));
+    expectSquare(selectField(newFoodGameState)[STARTING_ROW][8]).toEqual(snakeTrunk({ index: 2 }));
+    expectSquare(selectField(newFoodGameState)[STARTING_ROW][9]).toEqual(snakeTrunk({ index: 1 }));
+    expectSquare(selectField(newFoodGameState)[STARTING_ROW][10]).toEqual(snakeTrunk({ index: 0 }));
+    expectSquare(selectField(newFoodGameState)[STARTING_ROW][11]).toEqual(snakeHead());
     expect(selectSnakeSize(newFoodGameState)).toEqual(7);
+    expect(
+      selectField(newFoodGameState)
+        .flat()
+        .map(value => value.id),
+    ).toEqual(originalIds);
   });
 
   it('should it crash into itself it will not be able to move anymore', () => {
@@ -305,12 +331,12 @@ describe('moveSnake', () => {
     };
 
     const endGameState = moveSnake(gameState);
-    expect(selectField(endGameState)[STARTING_ROW][4]).toEqual(snakeTail());
-    expect(selectField(endGameState)[STARTING_ROW][5]).toEqual(snakeTrunk({ index: 3 }));
-    expect(selectField(endGameState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 2 }));
-    expect(selectField(endGameState)[STARTING_ROW][7]).toEqual(snakeTrunk({ index: 1 }));
-    expect(selectField(endGameState)[STARTING_ROW + 1][7]).toEqual(snakeTrunk({ index: 0 }));
-    expect(selectField(endGameState)[STARTING_ROW + 1][6]).toEqual(snakeHead());
+    expectSquare(selectField(endGameState)[STARTING_ROW][4]).toEqual(snakeTail());
+    expectSquare(selectField(endGameState)[STARTING_ROW][5]).toEqual(snakeTrunk({ index: 3 }));
+    expectSquare(selectField(endGameState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 2 }));
+    expectSquare(selectField(endGameState)[STARTING_ROW][7]).toEqual(snakeTrunk({ index: 1 }));
+    expectSquare(selectField(endGameState)[STARTING_ROW + 1][7]).toEqual(snakeTrunk({ index: 0 }));
+    expectSquare(selectField(endGameState)[STARTING_ROW + 1][6]).toEqual(snakeHead());
     expect(endGameState.gameOver).toStrictEqual(true);
   });
 
@@ -329,15 +355,38 @@ describe('moveSnake', () => {
       foodConsumed: false,
       gameOver: false,
     };
+    const originalIds = startingField.flat().map(value => value.id);
 
     const newState = moveSnake(gameState);
-    expect(selectField(newState)[STARTING_ROW][5]).toEqual(snakeTail());
-    expect(selectField(newState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 3 }));
-    expect(selectField(newState)[STARTING_ROW + 1][6]).toEqual(snakeTrunk({ index: 2 }));
-    expect(selectField(newState)[STARTING_ROW + 1][5]).toEqual(snakeTrunk({ index: 1 }));
-    expect(selectField(newState)[STARTING_ROW + 1][4]).toEqual(snakeTrunk({ index: 0 }));
-    expect(selectField(newState)[STARTING_ROW][4]).toEqual(snakeHead());
+    expectSquare(selectField(newState)[STARTING_ROW][5]).toEqual(snakeTail());
+    expectSquare(selectField(newState)[STARTING_ROW][6]).toEqual(snakeTrunk({ index: 3 }));
+    expectSquare(selectField(newState)[STARTING_ROW + 1][6]).toEqual(snakeTrunk({ index: 2 }));
+    expectSquare(selectField(newState)[STARTING_ROW + 1][5]).toEqual(snakeTrunk({ index: 1 }));
+    expectSquare(selectField(newState)[STARTING_ROW + 1][4]).toEqual(snakeTrunk({ index: 0 }));
+    expectSquare(selectField(newState)[STARTING_ROW][4]).toEqual(snakeHead());
     expect(newState.gameOver).toStrictEqual(false);
+    expect(
+      selectField(newState)
+        .flat()
+        .map(value => value.id),
+    ).toEqual(originalIds);
+  });
+
+  it('moving the snake should not move ids', () => {
+    const startingField = createEmptyField(WIDTH, HEIGHT);
+    startingField[STARTING_ROW][WIDTH - 6] = snakeTail();
+    startingField[STARTING_ROW][WIDTH - 5] = snakeTrunk({ index: 3 });
+    startingField[STARTING_ROW][WIDTH - 4] = snakeTrunk({ index: 2 });
+    startingField[STARTING_ROW][WIDTH - 3] = snakeTrunk({ index: 1 });
+    startingField[STARTING_ROW][WIDTH - 2] = snakeTrunk({ index: 0 });
+    startingField[STARTING_ROW][WIDTH - 1] = snakeHead();
+    const gameState = { field: startingField, direction: 'right', snakeSize: 6 };
+    const originalIds = startingField.flat().map(value => value.id);
+
+    const newGameState = moveSnake(gameState);
+
+    const field = selectField(newGameState);
+    expect(field.flat().map(value => value.id)).toEqual(originalIds);
   });
 
   it.todo('should handle two food in a row correctly');
@@ -416,6 +465,25 @@ describe('changeDirection', () => {
     expect(selectDirection(changeDirection(gameState, 'up'))).toEqual('down');
   });
 });
+
+/**
+ * Assertion that ignores square id.
+ */
+function expectSquare(actualSquare) {
+  return {
+    toEqual(expectedSquare) {
+      expect(typeof actualSquare === 'object' && typeof expectedSquare === 'object').toBeTruthy();
+      const actualSquareCopy = { ...actualSquare };
+      const expectedSquareCopy = { ...expectedSquare };
+      delete actualSquareCopy.id;
+      delete expectedSquareCopy.id;
+      expect(actualSquareCopy).toEqual(expectedSquareCopy);
+    },
+    toBeEmpty() {
+      expect(actualSquare.type).toEqual('empty');
+    },
+  };
+}
 
 // eslint-disable-next-line no-unused-vars
 function findSeed() {
