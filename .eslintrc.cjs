@@ -10,7 +10,9 @@ module.exports = {
     ecmaVersion: 2021,
     sourceType: 'module',
   },
-  rules: {},
+  rules: {
+    'jest/expect-expect': 'off',
+  },
   plugins: ['svelte3', 'jest'],
   overrides: [
     {
