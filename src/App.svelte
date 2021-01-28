@@ -22,7 +22,6 @@ function handleKeypress(event) {
   }
 }
 
-document.addEventListener('keypress', handleKeypress);
 let intervalId = setInterval(() => {
   gameStateStore.changeDirection(commandQueue.shift());
   gameStateStore.moveSnake();
@@ -36,12 +35,10 @@ $: {
   }, delay);
 }
 
-onDestroy(() => {
-  document.removeEventListener('keypress', handleKeypress);
-  clearInterval(intervalId);
-});
+onDestroy(() => clearInterval(intervalId));
 </script>
 
+<svelte:window on:keypress={handleKeypress} />
 <main>
   <h1>Snake</h1>
   <Field {gameState} />
