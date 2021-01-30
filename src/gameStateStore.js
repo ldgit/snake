@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
-import { changeDirection, moveSnake, newGame } from './core/snake';
+import { changeDirection, newGame } from './core/snake';
+import { moveSnake } from './core/moveSnake';
 
 function createGameStateStore() {
   const { subscribe, update } = writable(newGame());

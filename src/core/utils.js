@@ -33,3 +33,21 @@ const oppositeDirections = [['left', 'right'].sort().join(','), ['up', 'down'].s
 export function areOpposite(direction1, direction2) {
   return oppositeDirections.indexOf([direction1, direction2].sort().join(',')) >= 0;
 }
+
+const flattenedCoordinatesField = createFlattenedCoordinatesField(HEIGHT, WIDTH);
+
+/**
+ * Pick food location at random, avoiding fields occupied by the snake.
+ *
+ * @param {number|string} seed
+ * @param {any[][]} fieldWithSnake
+ */
+export function generateFoodCoordinates(seed, fieldWithSnake) {
+  // Selecting from an array of free coordinates ensures that each field has the same chance of containing food.
+  const freeCoordinates = flattenedCoordinatesField.filter(({ x, y }) => {
+    return fieldWithSnake[x][y]?.type !== 'snake';
+  });
+
+  const random = createRandomNumberGenerator(seed, { max: freeCoordinates.length });
+  return freeCoordinates[random()];
+}
