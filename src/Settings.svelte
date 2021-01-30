@@ -1,4 +1,6 @@
 <script>
+import Hoverable from './Hoverable.svelte';
+import { fade } from 'svelte/transition';
 import { speedMap, getDefaultSpeed } from './core/speedLevels';
 
 let speed = getDefaultSpeed();
@@ -6,30 +8,31 @@ export let delay = speedMap[speed].delay;
 $: delay = speedMap[speed].delay;
 </script>
 
-<div class="controls">
-  <div class="speedControl">
-    <button on:click={() => (speed > 0 ? (speed -= 1) : null)}>&#xFF0D;</button>
-    <input type="range" bind:value={speed} min="0" max={speedMap.length - 1} step="1" />
-    <button on:click={() => (speed < speedMap.length - 1 ? (speed += 1) : null)}>&#xFF0B</button>
-  </div>
+<Hoverable let:hovering class="controls">
   <span>{speedMap[speed].description}</span>
-</div>
+  {#if hovering}
+    <div class="speedControl" transition:fade>
+      <button on:click={() => (speed > 0 ? (speed -= 1) : null)}>&#xFF0D;</button>
+      <input type="range" bind:value={speed} min="0" max={speedMap.length - 1} step="1" />
+      <button on:click={() => (speed < speedMap.length - 1 ? (speed += 1) : null)}>&#xFF0B</button>
+    </div>
+  {/if}
+</Hoverable>
 
 <style>
-.controls {
+/* https://sveltesociety.dev/recipes/component-recipes/passing-attributes-to-component-dom-element */
+:global(.controls) {
   margin-top: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  height: 50px;
 }
 
 .speedControl {
   display: flex;
-}
-
-.controls span {
-  width: 400px;
+  margin-top: 4px;
 }
 
 input[type='range'] {
