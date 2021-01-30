@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
-import { changeDirection, newGame } from './core/snake';
+import { newGame } from './core/snake';
+import { changeDirection } from './core/changeDirection';
 import { moveSnake } from './core/moveSnake';
 
 function createGameStateStore() {

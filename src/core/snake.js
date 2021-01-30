@@ -1,6 +1,5 @@
-import { WIDTH, HEIGHT, STARTING_ROW, areOpposite, generateFoodCoordinates } from './utils';
-import { selectDirection } from './selectors';
-import { snakeHead, snakeTail, snakeTrunk, food, emptySquare } from './squares';
+import { WIDTH, HEIGHT, STARTING_ROW, createEmptyField, generateFoodCoordinates } from './utils';
+import { snakeHead, snakeTail, snakeTrunk, food } from './squares';
 
 export function newGame(seed = Math.floor(Math.random() * 10000000)) {
   const field = createEmptyField(WIDTH, HEIGHT);
@@ -21,19 +20,4 @@ export function newGame(seed = Math.floor(Math.random() * 10000000)) {
     foodConsumed: false,
     gameOver: false,
   };
-}
-
-export function changeDirection(gameState, newDirection) {
-  const oldDirection = selectDirection(gameState);
-
-  return {
-    ...gameState,
-    direction: areOpposite(oldDirection, newDirection) ? oldDirection : newDirection,
-  };
-}
-
-export function createEmptyField(width, height) {
-  return new Array(height)
-    .fill(null)
-    .map(() => new Array(width).fill(null).map(() => emptySquare()));
 }

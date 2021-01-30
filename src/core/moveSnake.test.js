@@ -1,7 +1,7 @@
-import { newGame, createEmptyField } from './snake';
+import { newGame } from './snake';
 import { moveSnake } from './moveSnake';
 import { snakeHead, snakeTail, snakeTrunk, food } from './squares';
-import { WIDTH, HEIGHT, STARTING_ROW, findCoordinatesForSquare } from './utils';
+import { WIDTH, HEIGHT, STARTING_ROW, findCoordinatesForSquare, createEmptyField } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 import { expectSquare } from '../test/utils';
 

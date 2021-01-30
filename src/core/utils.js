@@ -1,4 +1,5 @@
 import seedrandom from 'seedrandom';
+import { emptySquare } from '../core/squares';
 
 export const WIDTH = 32;
 export const HEIGHT = 17;
@@ -50,4 +51,10 @@ export function generateFoodCoordinates(seed, fieldWithSnake) {
 
   const random = createRandomNumberGenerator(seed, { max: freeCoordinates.length });
   return freeCoordinates[random()];
+}
+
+export function createEmptyField(width, height) {
+  return new Array(height)
+    .fill(null)
+    .map(() => new Array(width).fill(null).map(() => emptySquare()));
 }
