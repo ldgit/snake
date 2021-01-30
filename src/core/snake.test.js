@@ -1,4 +1,4 @@
-import { newGame } from './snake';
+import { newGame } from './newGame';
 import { createRandomNumberGenerator, WIDTH, HEIGHT, STARTING_ROW } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 import { expectSquare } from '../test/utils';

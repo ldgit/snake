@@ -1,4 +1,4 @@
-import { newGame } from './snake';
+import { newGame } from './newGame';
 import { moveSnake } from './moveSnake';
 import { snakeHead, snakeTail, snakeTrunk, food } from './squares';
 import { WIDTH, HEIGHT, STARTING_ROW, findCoordinatesForSquare, createEmptyField } from './utils';

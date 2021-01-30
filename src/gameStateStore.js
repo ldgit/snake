@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { newGame } from './core/snake';
+import { newGame } from './core/newGame';
 import { changeDirection } from './core/changeDirection';
 import { moveSnake } from './core/moveSnake';
 
