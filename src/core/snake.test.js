@@ -389,7 +389,28 @@ describe('moveSnake', () => {
     expect(field.flat().map(value => value.id)).toEqual(originalIds);
   });
 
-  it.todo('should handle two food in a row correctly');
+  it('should eat food in a row correctly', () => {
+    const field = createEmptyField(WIDTH, HEIGHT);
+    field[STARTING_ROW][13] = snakeTail();
+    field[STARTING_ROW][14] = snakeTrunk({ index: 3 });
+    field[STARTING_ROW][15] = snakeTrunk({ index: 2 });
+    field[STARTING_ROW][16] = snakeTrunk({ index: 1 });
+    field[STARTING_ROW][17] = snakeTrunk({ index: 0 });
+    field[STARTING_ROW][18] = snakeHead();
+    field[STARTING_ROW][19] = food();
+    field[STARTING_ROW][20] = food();
+    const gameState = {
+      field,
+      direction: 'right',
+      snakeSize: 6,
+      foodConsumed: false,
+      gameOver: false,
+    };
+
+    const gameStateAfterMoving = moveSnake(moveSnake(moveSnake(gameState)));
+
+    expect(selectSnakeSize(gameStateAfterMoving)).toEqual(8);
+  });
 });
 
 describe('changeDirection', () => {
