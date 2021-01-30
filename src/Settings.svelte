@@ -35,11 +35,31 @@ $: delay = speedMap[speed].delay;
   margin-top: 4px;
 }
 
+/* BEGIN Apply styles that allow us to customize range input */
 input[type='range'] {
   -webkit-appearance: none;
   width: 15vw; /* Specific width is required for Firefox. */
   background: transparent; /* Otherwise white in Chrome */
 }
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+input[type='range']:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type='range']::-ms-track {
+  width: 100%;
+  cursor: pointer;
+
+  /* Hides the slider so custom styles can be added */
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+/* END Apply styles that allow us to customize range input */
 
 /* Special styling for WebKit/Blink */
 input[type='range']::-webkit-slider-thumb {
@@ -50,7 +70,6 @@ input[type='range']::-webkit-slider-thumb {
   border-radius: 3px;
   background: #ffffff;
   cursor: pointer;
-  margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
 }
 
 /* All the same stuff for Firefox */
