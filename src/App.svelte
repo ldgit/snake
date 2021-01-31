@@ -1,41 +1,32 @@
 <script>
 import { onDestroy } from 'svelte';
-import gameStateStore from './gameStateStore';
 import Field from './Field.svelte';
 import Settings from './Settings.svelte';
+import startSnakeGame from './core/snake';
 
 let gameState;
 let delay;
-let commandQueue = [];
+const snakeGame = startSnakeGame({});
 
-gameStateStore.subscribe(newGameState => (gameState = newGameState));
+snakeGame.subscribe(newState => (gameState = newState));
+$: snakeGame.changeDelayBetweenMoves(delay);
+
 function handleKeypress(event) {
   const key = event.key.toLowerCase();
   if (key === 'w') {
-    commandQueue.push('up');
+    snakeGame.changeDirection('up');
   } else if (key === 's') {
-    commandQueue.push('down');
+    snakeGame.changeDirection('down');
   } else if (key === 'd') {
-    commandQueue.push('right');
+    snakeGame.changeDirection('right');
   } else if (key === 'a') {
-    commandQueue.push('left');
+    snakeGame.changeDirection('left');
+  } else if (key === 'p') {
+    snakeGame.togglePause();
   }
 }
 
-let intervalId = setInterval(() => {
-  gameStateStore.changeDirection(commandQueue.shift());
-  gameStateStore.moveSnake();
-}, delay);
-
-$: {
-  clearInterval(intervalId);
-  intervalId = setInterval(() => {
-    gameStateStore.changeDirection(commandQueue.shift());
-    gameStateStore.moveSnake();
-  }, delay);
-}
-
-onDestroy(() => clearInterval(intervalId));
+onDestroy(snakeGame.destroy);
 </script>
 
 <svelte:window on:keypress={handleKeypress} />
