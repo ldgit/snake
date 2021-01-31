@@ -10,7 +10,8 @@
     "test:all": "npm run lint && npm run style && npm test",
     "lint": "eslint .",
     "style": "prettier --check .",
-    "style:fix": "prettier --write ."
+    "style:fix": "prettier --write .",
+    "deploy": "npm run test:all && npm run build && cp -R public/. docs/"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
