@@ -3,7 +3,7 @@ import { moveSnake } from './moveSnake';
 import { snakeHead, snakeTail, snakeTrunk, food } from './squares';
 import { WIDTH, HEIGHT, STARTING_ROW, findCoordinatesForSquare, createEmptyField } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
-import { expectSquare } from '../test/utils';
+import { expectSquare, createState } from '../test/utils';
 
 describe('moveSnake', () => {
   it('should move snake by one square in current direction', () => {
@@ -27,6 +27,7 @@ describe('moveSnake', () => {
     // Food is not moved
     expectSquare(field1[5][17]).toEqual({ type: 'food' });
     expect(gameState1.foodConsumed).toStrictEqual(false);
+    expect(gameState1.score).toEqual(0);
 
     const gameState2 = moveSnake(gameState1);
     const field2 = selectField(gameState2);
@@ -43,6 +44,7 @@ describe('moveSnake', () => {
     // Food is not moved
     expectSquare(selectField(gameState2)[5][17]).toEqual({ type: 'food' });
     expect(gameState2.foodConsumed).toStrictEqual(false);
+    expect(gameState2.score).toEqual(0);
   });
 
   it('should not modify other squares', () => {
@@ -63,7 +65,7 @@ describe('moveSnake', () => {
     startingField[STARTING_ROW][WIDTH - 3] = snakeTrunk({ index: 1 });
     startingField[STARTING_ROW][WIDTH - 2] = snakeTrunk({ index: 0 });
     startingField[STARTING_ROW][WIDTH - 1] = snakeHead();
-    const gameState = { field: startingField, direction: 'right', snakeSize: 6 };
+    const gameState = createState({ field: startingField });
 
     const newGameState = moveSnake(gameState);
 
@@ -79,7 +81,7 @@ describe('moveSnake', () => {
     startingField[STARTING_ROW][16] = snakeTrunk({ index: 2 });
     startingField[STARTING_ROW][17] = snakeTrunk({ index: 3 });
     startingField[STARTING_ROW][18] = snakeTail();
-    const gameState = { field: startingField, direction: 'left', snakeSize: 6 };
+    const gameState = createState({ field: startingField, direction: 'left' });
 
     const newGameState = moveSnake(gameState);
 
@@ -102,7 +104,7 @@ describe('moveSnake', () => {
     startingField[STARTING_ROW][3] = snakeTrunk({ index: 2 });
     startingField[STARTING_ROW][4] = snakeTrunk({ index: 3 });
     startingField[STARTING_ROW][5] = snakeTail();
-    const gameState = { field: startingField, direction: 'left', snakeSize: 6 };
+    const gameState = createState({ field: startingField, direction: 'left' });
 
     const newGameState = moveSnake(gameState);
 
@@ -118,7 +120,7 @@ describe('moveSnake', () => {
     startingField[7][15] = snakeTrunk({ index: 2 });
     startingField[8][15] = snakeTrunk({ index: 3 });
     startingField[9][15] = snakeTail();
-    const gameState = { field: startingField, direction: 'up', snakeSize: 6 };
+    const gameState = createState({ field: startingField, direction: 'up' });
 
     const newGameState = moveSnake(gameState);
 
@@ -141,7 +143,7 @@ describe('moveSnake', () => {
     startingField[3][15] = snakeTrunk({ index: 2 });
     startingField[4][15] = snakeTrunk({ index: 3 });
     startingField[5][15] = snakeTail();
-    const gameState = { field: startingField, direction: 'up', snakeSize: 6 };
+    const gameState = createState({ field: startingField, direction: 'up' });
 
     const newGameState = moveSnake(gameState);
 
@@ -157,7 +159,7 @@ describe('moveSnake', () => {
     startingField[7][15] = snakeTrunk({ index: 1 });
     startingField[8][15] = snakeTrunk({ index: 0 });
     startingField[9][15] = snakeHead();
-    const gameState = { field: startingField, direction: 'down', snakeSize: 6 };
+    const gameState = createState({ field: startingField, direction: 'down' });
 
     const newGameState = moveSnake(gameState);
 
@@ -180,7 +182,7 @@ describe('moveSnake', () => {
     startingField[HEIGHT - 3][15] = snakeTrunk({ index: 1 });
     startingField[HEIGHT - 2][15] = snakeTrunk({ index: 0 });
     startingField[HEIGHT - 1][15] = snakeHead();
-    const gameState = { field: startingField, direction: 'down', snakeSize: 6 };
+    const gameState = createState({ field: startingField, direction: 'down' });
 
     const newGameState = moveSnake(gameState);
 
@@ -197,17 +199,13 @@ describe('moveSnake', () => {
     startingField[STARTING_ROW][8] = snakeTrunk({ index: 0 });
     startingField[STARTING_ROW][9] = snakeHead();
     startingField[STARTING_ROW][10] = food();
-    const gameState = {
-      field: startingField,
-      direction: 'right',
-      snakeSize: 6,
-      foodConsumed: false,
-    };
+    const gameState = createState({ field: startingField, foodConsumed: false, score: 0 });
     const originalIds = startingField.flat().map(value => value.id);
 
     const foodConsumedGameState = moveSnake(gameState);
 
     // Snake moves forward without growing and food is gone
+    expect(foodConsumedGameState.score).toEqual(5);
     expectSquare(selectField(foodConsumedGameState)[STARTING_ROW][5]).toEqual(snakeTail());
     expectSquare(selectField(foodConsumedGameState)[STARTING_ROW][6]).toEqual(
       snakeTrunk({ index: 3 }),
@@ -266,13 +264,12 @@ describe('moveSnake', () => {
     startingField[STARTING_ROW][7] = snakeTrunk({ index: 1 });
     startingField[STARTING_ROW + 1][7] = snakeTrunk({ index: 0 });
     startingField[STARTING_ROW + 1][6] = snakeHead();
-    const gameState = {
+    const gameState = createState({
       field: startingField,
       direction: 'up',
-      snakeSize: 6,
       foodConsumed: false,
       gameOver: false,
-    };
+    });
 
     const endGameState = moveSnake(gameState);
     expectSquare(selectField(endGameState)[STARTING_ROW][4]).toEqual(snakeTail());
@@ -292,13 +289,13 @@ describe('moveSnake', () => {
     startingField[STARTING_ROW + 1][6] = snakeTrunk({ index: 1 });
     startingField[STARTING_ROW + 1][5] = snakeTrunk({ index: 0 });
     startingField[STARTING_ROW + 1][4] = snakeHead();
-    const gameState = {
+    const gameState = createState({
       field: startingField,
       direction: 'up',
-      snakeSize: 6,
       foodConsumed: false,
       gameOver: false,
-    };
+    });
+
     const originalIds = startingField.flat().map(value => value.id);
 
     const newState = moveSnake(gameState);
@@ -324,7 +321,7 @@ describe('moveSnake', () => {
     startingField[STARTING_ROW][WIDTH - 3] = snakeTrunk({ index: 1 });
     startingField[STARTING_ROW][WIDTH - 2] = snakeTrunk({ index: 0 });
     startingField[STARTING_ROW][WIDTH - 1] = snakeHead();
-    const gameState = { field: startingField, direction: 'right', snakeSize: 6 };
+    const gameState = createState({ field: startingField });
     const originalIds = startingField.flat().map(value => value.id);
 
     const newGameState = moveSnake(gameState);
@@ -333,7 +330,7 @@ describe('moveSnake', () => {
     expect(field.flat().map(value => value.id)).toEqual(originalIds);
   });
 
-  it('should eat food in a row correctly', () => {
+  it('should eat two food in a row correctly', () => {
     const field = createEmptyField(WIDTH, HEIGHT);
     field[STARTING_ROW][13] = snakeTail();
     field[STARTING_ROW][14] = snakeTrunk({ index: 3 });
@@ -343,16 +340,12 @@ describe('moveSnake', () => {
     field[STARTING_ROW][18] = snakeHead();
     field[STARTING_ROW][19] = food();
     field[STARTING_ROW][20] = food();
-    const gameState = {
-      field,
-      direction: 'right',
-      snakeSize: 6,
-      foodConsumed: false,
-      gameOver: false,
-    };
+    const gameState = createState({ field });
 
-    const gameStateAfterMoving = moveSnake(moveSnake(moveSnake(gameState)));
+    const gameStateAfterTwoMoves = moveSnake(moveSnake(gameState));
+    const gameStateAfterThreeMoves = moveSnake(gameStateAfterTwoMoves);
 
-    expect(selectSnakeSize(gameStateAfterMoving)).toEqual(8);
+    expect(selectSnakeSize(gameStateAfterThreeMoves)).toEqual(8);
+    expect(gameStateAfterTwoMoves.score).toEqual(10);
   });
 });

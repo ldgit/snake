@@ -1,6 +1,7 @@
 <script>
 import { onDestroy } from 'svelte';
 import Field from './Field.svelte';
+import Score from './Score.svelte';
 import Settings from './Settings.svelte';
 import startSnakeGame from './core/snake';
 
@@ -32,7 +33,12 @@ onDestroy(snakeGame.destroy);
 <svelte:window on:keypress={handleKeypress} />
 <main>
   <h1>Snake</h1>
-  <Field {gameState} />
+  <div class="game">
+    <span class="score">
+      <Score current={gameState.score} />
+    </span>
+    <Field {gameState} />
+  </div>
   <Settings bind:delay />
 </main>
 
@@ -42,6 +48,16 @@ main {
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.score {
+  font-size: 2rem;
 }
 
 h1 {

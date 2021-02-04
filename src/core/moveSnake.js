@@ -65,6 +65,7 @@ export function moveSnake(gameState) {
     foodConsumed: foodConsumedOnThisMove,
     field: newField,
     snakeSize: gameState.foodConsumed ? gameState.snakeSize + 1 : gameState.snakeSize,
+    score: foodConsumedOnThisMove ? gameState.score + 5 : gameState.score,
   };
 }
 

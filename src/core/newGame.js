@@ -19,5 +19,6 @@ export function newGame(seed = Math.floor(Math.random() * 10000000)) {
     snakeSize: 6,
     foodConsumed: false,
     gameOver: false,
+    score: 0,
   };
 }

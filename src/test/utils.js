@@ -1,3 +1,5 @@
+import { newGame } from '../core/newGame';
+
 /**
  * Assertion that ignores square id.
  */
@@ -14,5 +16,13 @@ export function expectSquare(actualSquare) {
     toBeEmpty() {
       expect(actualSquare.type).toEqual('empty');
     },
+  };
+}
+
+export function createState(partialState = {}) {
+  return {
+    ...newGame(),
+    snakeSize: 6,
+    ...partialState,
   };
 }

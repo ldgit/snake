@@ -45,6 +45,10 @@ describe('newGame', () => {
       expect(gameState.foodConsumed).toStrictEqual(false);
     },
   );
+
+  it('should have score property', () => {
+    expect(newGame().score).toEqual(0);
+  });
 });
 
 // eslint-disable-next-line no-unused-vars
