@@ -1,3 +1,4 @@
+import { get } from 'svelte/store';
 import startScoring from './score';
 
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -58,5 +59,55 @@ describe('Score counter', () => {
       }),
     );
     expect(finalValue).toEqual(15);
+  });
+
+  it.each([50, 370])(
+    'setting score to smaller number should set it to that number in one and a half seconds (starting score: %s)',
+    async startingScore => {
+      const startTime = Date.now();
+      const scoreStore = startScoring(startingScore, { countDelay: 1000 });
+      const counterReachedZero = new Promise(resolve => {
+        scoreStore.subscribe(displayedScore => {
+          if (displayedScore === 0) {
+            resolve(displayedScore);
+          }
+        });
+      });
+
+      scoreStore.newScore(0);
+
+      await counterReachedZero;
+      expect(Date.now() - startTime).toBeLessThan(1600);
+      expect(Date.now() - startTime).toBeGreaterThan(1400);
+    },
+  );
+
+  it.each([400, 1000, 10000])(
+    'if difference when decreasing the score is to large, just set it to zero immediately',
+    async startingScore => {
+      const startTime = Date.now();
+      const scoreStore = startScoring(startingScore, { countDelay: 1000 });
+      const counterReachedZero = new Promise(resolve => {
+        scoreStore.subscribe(displayedScore => {
+          if (displayedScore === 0) {
+            resolve(displayedScore);
+          }
+        });
+      });
+
+      scoreStore.newScore(0);
+
+      await counterReachedZero;
+      expect(Date.now() - startTime).toBeLessThan(50);
+    },
+  );
+
+  it('setting to same score does nothing', async () => {
+    const scoreStore = startScoring(50, { countDelay: 5 });
+
+    scoreStore.newScore(50);
+
+    await sleep(50);
+    expect(get({ subscribe: scoreStore.subscribe })).toEqual(50);
   });
 });
