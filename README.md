@@ -4,7 +4,7 @@
 
 A basic [Snake](<https://en.wikipedia.org/wiki/Snake_(video_game_genre)>) clone made using [Svelte](https://svelte.dev/) framework.
 
-You can try it [here](https://ldgit.github.io/snake/). Use `w` `a` `s` `d` keys to move, `p` to pause game.
+You can try it [here](https://ldgit.github.io/snake/). Use `w` `a` `s` `d` keys to move and `p` to pause the game.
 
 ## Usage
 
