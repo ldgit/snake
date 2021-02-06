@@ -4,12 +4,13 @@ import Field from './Field.svelte';
 import Score from './Score.svelte';
 import Settings from './Settings.svelte';
 import startSnakeGame from './core/snake';
+import GameOver from './GameOver.svelte';
 
 let gameState;
 let delay;
-const snakeGame = startSnakeGame({});
+let snakeGame = startSnakeGame({});
 
-snakeGame.subscribe(newState => (gameState = newState));
+$: snakeGame.subscribe(newState => (gameState = newState));
 $: snakeGame.changeDelayBetweenMoves(delay);
 
 function handleKeypress(event) {
@@ -28,6 +29,11 @@ function handleKeypress(event) {
 }
 
 onDestroy(snakeGame.destroy);
+
+function restartGame() {
+  snakeGame.destroy();
+  snakeGame = startSnakeGame({});
+}
 </script>
 
 <svelte:window on:keypress={handleKeypress} />
@@ -40,6 +46,10 @@ onDestroy(snakeGame.destroy);
     <Field {gameState} />
   </div>
   <Settings bind:delay />
+  <GameOver
+    gameOver={gameState.gameOver}
+    finalScore={gameState.score}
+    onNewGameClick={restartGame} />
 </main>
 
 <style>
