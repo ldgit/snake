@@ -2,7 +2,7 @@ import { WIDTH, HEIGHT, findCoordinatesForSquare, generateFoodCoordinates } from
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 import { snakeHead, snakeTail, snakeTrunk, food, emptySquare } from './squares';
 
-export function moveSnake(gameState) {
+export function moveSnake(gameState, seed = Math.floor(Math.random() * 10000000)) {
   const field = selectField(gameState);
   const snakeSize = selectSnakeSize(gameState);
   const newHeadCoordinates = getNewHeadCoordinates(field, selectDirection(gameState));
@@ -15,7 +15,6 @@ export function moveSnake(gameState) {
   }
 
   let foodConsumedOnThisMove = false;
-
   const newField = field.map((row, rowIndex) => {
     return row.map((square, columnIndex) => {
       // Tail moves away unless food was consumed on previous move
@@ -53,7 +52,7 @@ export function moveSnake(gameState) {
   });
 
   if (gameState.foodConsumed) {
-    const foodCoordinates = generateFoodCoordinates(Math.floor(Math.random() * 10000000), field);
+    const foodCoordinates = generateFoodCoordinates(seed, newField);
     newField[foodCoordinates.x][foodCoordinates.y] = {
       ...food(),
       id: newField[foodCoordinates.x][foodCoordinates.y].id,
