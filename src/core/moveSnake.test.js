@@ -348,4 +348,26 @@ describe('moveSnake', () => {
     expect(selectSnakeSize(gameStateAfterThreeMoves)).toEqual(8);
     expect(gameStateAfterTwoMoves.score).toEqual(10);
   });
+
+  it('regression test - using previous move field instead of latest one when generating new food square', () => {
+    const gameState = newGame();
+    const field = selectField(gameState);
+    field[STARTING_ROW][19] = food();
+
+    // With this seed food will be generated over the new head location if we use old field version to generate food
+    moveSnake(moveSnake(moveSnake(gameState), 894076));
+  });
+
+  // Error above test is guarding for has a chance of 1 in {total number of squares - snake length}, so repeating this
+  // test thousand times should be enough to flush it out if it resurfaces
+  it.each(new Array(1000).fill([]))(
+    'regression test - using previous move field instead of latest one when generating new food square',
+    () => {
+      const gameState = newGame();
+      const field = selectField(gameState);
+      field[STARTING_ROW][19] = food();
+
+      moveSnake(moveSnake(moveSnake(gameState)));
+    },
+  );
 });
