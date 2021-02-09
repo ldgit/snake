@@ -28,6 +28,7 @@ $: delay = speedMap[speed].delay;
   align-items: center;
   justify-content: flex-start;
   height: 50px;
+  min-width: 500px;
 }
 
 .speedControl {
