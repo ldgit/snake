@@ -38,7 +38,6 @@ function getSquareClasses(square) {
 }
 
 .square {
-  font-size: 8px;
   width: 3.4vh;
   height: 3.4vh;
 }
