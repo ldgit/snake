@@ -1,5 +1,5 @@
 import seedrandom from 'seedrandom';
-import { emptySquare } from '../core/squares';
+import { emptySquare } from './squares';
 
 export const WIDTH = 32;
 export const HEIGHT = 17;

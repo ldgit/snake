@@ -1,4 +1,4 @@
-<script>
+<script type="text/typescript">
 import startScoring from './core/score';
 
 const scoreStore = startScoring();

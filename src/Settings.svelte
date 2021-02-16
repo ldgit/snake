@@ -1,4 +1,4 @@
-<script>
+<script type="text/typescript">
 import Hoverable from './Hoverable.svelte';
 import { fade } from 'svelte/transition';
 import { speedMap, getDefaultSpeed } from './core/speedLevels';

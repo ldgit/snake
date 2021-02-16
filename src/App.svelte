@@ -1,4 +1,4 @@
-<script>
+<script type="text/typescript">
 import { onDestroy } from 'svelte';
 import Field from './Field.svelte';
 import Score from './Score.svelte';

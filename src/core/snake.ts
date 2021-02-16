@@ -6,7 +6,12 @@ import { getDefaultSpeed, speedMap } from './speedLevels';
 
 const defaultDelay = speedMap[getDefaultSpeed()].delay;
 
-export default function startSnakeGame({ delay = defaultDelay, logger = () => {} }) {
+interface snakeGameOptions {
+  delay?: number;
+  logger?: (message) => void
+}
+
+export default function startSnakeGame({ delay = defaultDelay, logger = () => {} }: snakeGameOptions) {
   const { subscribe, update } = writable(newGame());
   const commandQueue = [];
   let lastDelay = delay;

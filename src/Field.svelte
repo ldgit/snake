@@ -1,7 +1,9 @@
-<script>
+<script type="text/typescript">
+import type { GameState } from './core/types';
+
 import { WIDTH, HEIGHT } from './core/utils';
 
-export let gameState;
+export let gameState: GameState;
 
 function getSquareClasses(square) {
   if (square?.type === 'snake') {

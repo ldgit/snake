@@ -1,4 +1,4 @@
-<script>
+<script type="text/typescript">
 let hovering;
 const enter = () => {
   hovering = true;
