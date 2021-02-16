@@ -179,11 +179,11 @@ module.exports = {
   transform: {
     '^.+\\.js$': 'babel-jest',
     '^.+\\.ts$': 'babel-jest',
-    "^.+\\.svelte$": [
-      "svelte-jester",
+    '^.+\\.svelte$': [
+      'svelte-jester',
       {
-        "preprocess": "src/test/svelte.config.js"
-      }
+        preprocess: 'src/test/svelte.config.js',
+      },
     ],
   },
   moduleFileExtensions: ['js', 'svelte', 'ts'],

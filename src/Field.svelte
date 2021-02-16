@@ -1,4 +1,4 @@
-<script type="text/typescript">
+<script lang="ts">
 import type { GameState } from './core/types';
 
 import { WIDTH, HEIGHT } from './core/utils';

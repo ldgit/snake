@@ -8,10 +8,13 @@ const defaultDelay = speedMap[getDefaultSpeed()].delay;
 
 interface snakeGameOptions {
   delay?: number;
-  logger?: (message) => void
+  logger?: (message) => void;
 }
 
-export default function startSnakeGame({ delay = defaultDelay, logger = () => {} }: snakeGameOptions) {
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {};
+
+export default function startSnakeGame({ delay = defaultDelay, logger = noop }: snakeGameOptions) {
   const { subscribe, update } = writable(newGame());
   const commandQueue = [];
   let lastDelay = delay;

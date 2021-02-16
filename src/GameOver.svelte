@@ -1,4 +1,4 @@
-<script type="text/typescript">
+<script lang="ts">
 import { scale } from 'svelte/transition';
 import { quadIn } from 'svelte/easing';
 
