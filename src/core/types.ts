@@ -5,9 +5,13 @@ export interface Square {
   type: 'empty' | 'snake' | 'food';
 }
 
+export type Field = Array<Array<Square>>;
+
+export type Direction = 'left' | 'right' | 'up' | 'down';
+
 export interface GameState {
-  field: Array<Array<Square>>;
-  direction: 'left' | 'right' | 'up' | 'down';
+  field: Field;
+  direction: Direction;
   snakeSize: number;
   foodConsumed: boolean;
   gameOver: boolean;

@@ -1,9 +1,12 @@
 import { newGame } from '../core/newGame';
+import type { GameState, Square } from '../core/types';
 
 /**
  * Assertion that ignores square id.
  */
-export function expectSquare(actualSquare) {
+export function expectSquare(
+  actualSquare: Square,
+): { toEqual(expectedSquare: Square): void; toBeEmpty(): void } {
   return {
     toEqual(expectedSquare) {
       expect(typeof actualSquare === 'object' && typeof expectedSquare === 'object').toBeTruthy();
@@ -19,7 +22,7 @@ export function expectSquare(actualSquare) {
   };
 }
 
-export function createState(partialState = {}) {
+export function createState(partialState = {}): GameState {
   return {
     ...newGame(),
     snakeSize: 6,

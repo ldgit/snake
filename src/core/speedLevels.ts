@@ -15,6 +15,6 @@ export const speedMap = [
   { delay: 4, description: 'Warp 11' }, // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval#delay_restrictions
 ];
 
-export function getDefaultSpeed() {
+export function getDefaultSpeed(): number {
   return speedMap.findIndex(value => value.delay === 80);
 }

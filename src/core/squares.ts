@@ -5,7 +5,7 @@ export function snakeHead(): Square {
   return { type: 'snake', bodyPart: 'head', id: uuidv4() };
 }
 
-export function snakeTrunk({ index }): Square {
+export function snakeTrunk({ index }: { index: number }): Square {
   return { type: 'snake', bodyPart: 'trunk', index, id: uuidv4() };
 }
 
