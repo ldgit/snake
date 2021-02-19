@@ -1,6 +1,7 @@
 import startSnakeGame from './snake';
 import { selectDirection, selectField } from './selectors';
 import { WIDTH, HEIGHT, STARTING_ROW } from './utils';
+import type { GameState } from './types';
 
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
@@ -31,7 +32,7 @@ describe('snake game', () => {
 
   it('allows controlling snake direction', async () => {
     const snakeGame = startSnakeGame({ delay: 20 });
-    const snakeGoesDown = new Promise(resolve =>
+    const snakeGoesDown: Promise<GameState> = new Promise(resolve =>
       snakeGame.subscribe(newState => {
         if (newState.direction === 'down') {
           resolve(newState);
@@ -48,7 +49,7 @@ describe('snake game', () => {
     const startingTime = Date.now();
     const snakeGame = startSnakeGame({ delay: 100 });
     const stateAfterFirstDirectionChange = stateAfterUpdates(snakeGame, 1);
-    const snakeTurnsLeft = new Promise(resolve =>
+    const snakeTurnsLeft: Promise<GameState> = new Promise(resolve =>
       snakeGame.subscribe(newState => {
         if (newState.direction === 'left') {
           resolve(newState);
@@ -159,7 +160,7 @@ describe('snake game', () => {
   });
 });
 
-function stateAfterUpdates(snakeGame, numberOfUpdates) {
+function stateAfterUpdates(snakeGame, numberOfUpdates): Promise<GameState> {
   let stateUpdatesCount = 0;
 
   return new Promise(resolve => {

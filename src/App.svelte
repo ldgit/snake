@@ -11,7 +11,7 @@ let gameState: GameState;
 let delay: number;
 let snakeGame = startSnakeGame({});
 
-$: snakeGame.subscribe(newState => (gameState = newState));
+$: snakeGame.subscribe((newState: GameState) => (gameState = newState));
 $: snakeGame.changeDelayBetweenMoves(delay);
 
 function handleKeypress(event) {
