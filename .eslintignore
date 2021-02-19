@@ -1,4 +1,1 @@
 /public/build/
-# Temporarily ignore svelte files since eslint + typescript + svelte support has not fully matured yet
-# Support for this was merged literally yesterday: https://github.com/sveltejs/eslint-plugin-svelte3/pull/83
-/**/*.svelte
