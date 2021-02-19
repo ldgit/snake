@@ -175,10 +175,17 @@ module.exports = {
   // Whether to use watchman for file crawling
   // watchman: true,
 
+  // See https://github.com/mihar-22/svelte-jester#typescript for svelte typescript instructions
   transform: {
     '^.+\\.js$': 'babel-jest',
-    '^.+\\.svelte$': 'svelte-jester',
+    '^.+\\.ts$': 'babel-jest',
+    '^.+\\.svelte$': [
+      'svelte-jester',
+      {
+        preprocess: 'src/test/svelte.config.js',
+      },
+    ],
   },
-  moduleFileExtensions: ['js', 'svelte'],
+  moduleFileExtensions: ['js', 'svelte', 'ts'],
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
 };

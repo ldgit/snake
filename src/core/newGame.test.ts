@@ -1,5 +1,5 @@
 import { newGame } from './newGame';
-import { createRandomNumberGenerator, WIDTH, HEIGHT, STARTING_ROW } from './utils';
+import { WIDTH, HEIGHT, STARTING_ROW } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 import { expectSquare } from '../test/utils';
 
@@ -50,18 +50,3 @@ describe('newGame', () => {
     expect(newGame().score).toEqual(0);
   });
 });
-
-// eslint-disable-next-line no-unused-vars
-function findSeed() {
-  let x;
-  let y;
-  let seed;
-  do {
-    seed = Math.floor(Math.random() * 10000000);
-    const a = createRandomNumberGenerator(seed, { min: 0, max: 30 });
-    const b = createRandomNumberGenerator(seed, { min: 0, max: 15 });
-    x = a();
-    y = b();
-  } while ([13, 14, 15, 16, 17, 18, 19].indexOf(x) < 0 || y !== 9);
-  console.log(`Found seed ${seed}, coords: (${x}, ${y})`);
-}

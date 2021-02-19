@@ -1,16 +1,17 @@
-<script>
+<script lang="ts">
 import { onDestroy } from 'svelte';
 import Field from './Field.svelte';
 import Score from './Score.svelte';
 import Settings from './Settings.svelte';
 import startSnakeGame from './core/snake';
 import GameOver from './GameOver.svelte';
+import type { GameState } from './core/types';
 
-let gameState;
-let delay;
+let gameState: GameState;
+let delay: number;
 let snakeGame = startSnakeGame({});
 
-$: snakeGame.subscribe(newState => (gameState = newState));
+$: snakeGame.subscribe((newState: GameState) => (gameState = newState));
 $: snakeGame.changeDelayBetweenMoves(delay);
 
 function handleKeypress(event) {

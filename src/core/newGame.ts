@@ -1,7 +1,8 @@
 import { WIDTH, HEIGHT, STARTING_ROW, createEmptyField, generateFoodCoordinates } from './utils';
 import { snakeHead, snakeTail, snakeTrunk, food } from './squares';
+import type { GameState } from './types';
 
-export function newGame(seed = Math.floor(Math.random() * 10000000)) {
+export function newGame(seed = Math.floor(Math.random() * 10000000)): GameState {
   const field = createEmptyField(WIDTH, HEIGHT);
   field[STARTING_ROW][13] = snakeTail();
   field[STARTING_ROW][14] = snakeTrunk({ index: 3 });

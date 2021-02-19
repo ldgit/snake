@@ -1,8 +1,12 @@
 import { WIDTH, HEIGHT, findCoordinatesForSquare, generateFoodCoordinates } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 import { snakeHead, snakeTail, snakeTrunk, food, emptySquare } from './squares';
+import type { GameState } from './types';
 
-export function moveSnake(gameState, seed = Math.floor(Math.random() * 10000000)) {
+export function moveSnake(
+  gameState: GameState,
+  seed = Math.floor(Math.random() * 10000000),
+): GameState {
   const field = selectField(gameState);
   const snakeSize = selectSnakeSize(gameState);
   const newHeadCoordinates = getNewHeadCoordinates(field, selectDirection(gameState));

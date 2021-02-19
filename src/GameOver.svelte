@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
 import { scale } from 'svelte/transition';
 import { quadIn } from 'svelte/easing';
 
-export let gameOver;
-export let finalScore;
+export let gameOver: boolean;
+export let finalScore: number;
 export let onNewGameClick;
 </script>
 

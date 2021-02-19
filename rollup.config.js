@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+import autoPreprocess from 'svelte-preprocess';
+import typescript from '@rollup/plugin-typescript';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -29,7 +32,7 @@ function serve() {
 }
 
 export default {
-  input: 'src/main.js',
+  input: 'src/main.ts',
   output: {
     sourcemap: true,
     format: 'iife',
@@ -38,6 +41,7 @@ export default {
   },
   plugins: [
     svelte({
+      preprocess: autoPreprocess(),
       compilerOptions: {
         // enable run-time checks when not in production
         dev: !production,
@@ -56,6 +60,8 @@ export default {
       browser: true,
       dedupe: ['svelte'],
     }),
+    // Has to come after node-resolve plugin
+    typescript({ sourceMap: !production }),
     commonjs(),
 
     // In dev mode, call `npm run start` once

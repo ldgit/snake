@@ -1,6 +1,11 @@
 import { writable } from 'svelte/store';
 
-export default function startScoring(startingScore = 0, options = { countDelay: 20 }) {
+interface ScoreStore {
+  subscribe(subscriber): () => void;
+  newScore(newScore: number): void;
+}
+
+export default function startScoring(startingScore = 0, options = { countDelay: 20 }): ScoreStore {
   const { subscribe, update } = writable(startingScore);
   let current = startingScore;
 

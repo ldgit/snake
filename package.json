@@ -7,22 +7,29 @@
     "start": "sirv public",
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "test:all": "npm run lint && npm run style && npm test",
     "lint": "eslint .",
     "style": "prettier --check .",
-    "style:fix": "prettier --write ."
+    "style:fix": "prettier --write .",
+    "svelte-check": "svelte-check",
+    "test:all": "npm run svelte-check && npm run lint && npm run style && npm test"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
     "@babel/preset-env": "^7.12.13",
+    "@babel/preset-typescript": "^7.12.16",
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.1.1",
+    "@rollup/plugin-typescript": "^8.2.0",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/svelte": "^3.0.3",
+    "@tsconfig/svelte": "^1.0.10",
+    "@types/jest": "^26.0.20",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
     "babel-jest": "^26.6.3",
     "eslint": "^7.19.0",
     "eslint-plugin-jest": "^24.1.3",
-    "eslint-plugin-svelte3": "^3.0.0",
+    "eslint-plugin-svelte3": "^3.1.1",
     "husky": "^4.3.8",
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
@@ -34,7 +41,10 @@
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
     "svelte": "^3.32.2",
-    "svelte-jester": "^1.3.0"
+    "svelte-check": "^1.1.34",
+    "svelte-jester": "^1.3.0",
+    "svelte-preprocess": "^4.6.9",
+    "typescript": "^4.1.5"
   },
   "dependencies": {
     "seedrandom": "^3.0.5",
@@ -47,7 +57,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,svelte}": "eslint --cache --fix",
-    "*.{js,css,md,svelte,yml}": "prettier --write"
+    "*.{js,ts}": "eslint --cache --fix",
+    "*.{js,ts,css,md,svelte,yml}": "prettier --write"
   }
 }
