@@ -15,7 +15,7 @@ interface snakeGameOptions {
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-interface SnakeGame {
+export interface SnakeGame {
   subscribe(subscriber): () => void;
   changeDirection(direction: Direction): void;
   changeDelayBetweenMoves(newDelay: number): void;
@@ -58,7 +58,9 @@ export default function startSnakeGame({
   return {
     subscribe,
     changeDirection(direction) {
-      commandQueue.push(direction);
+      if (!paused) {
+        commandQueue.push(direction);
+      }
     },
     changeDelayBetweenMoves,
     togglePause() {

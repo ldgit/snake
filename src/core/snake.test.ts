@@ -1,7 +1,7 @@
-import startSnakeGame from './snake';
+import startSnakeGame, { SnakeGame } from './snake';
 import { selectDirection, selectField } from './selectors';
 import { WIDTH, HEIGHT, STARTING_ROW } from './utils';
-import type { GameState } from './types';
+import type { Direction, GameState } from './types';
 
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
@@ -136,6 +136,22 @@ describe('snake game', () => {
     expect(spyLogger).toHaveBeenCalledTimes(1);
   });
 
+  it.each(['up', 'down'] as Direction[])(
+    'disables snake controls if game is paused (attempted direction: %s)',
+    async (direction: Direction) => {
+      const snakeGame = startSnakeGame({ delay: 10 });
+      // Guard assertion to confirm initial direction
+      expect((await getLatestState(snakeGame)).direction).toEqual('right');
+
+      snakeGame.togglePause();
+      snakeGame.changeDirection(direction);
+      snakeGame.togglePause(); // end pause
+
+      await sleep(50);
+      expect((await getLatestState(snakeGame)).direction).toEqual('right');
+    },
+  );
+
   it('cleanup timers after game end', async () => {
     const spyLogger = jest.fn();
     const snakeGame = startSnakeGame({ delay: 4, logger: spyLogger });
@@ -170,5 +186,12 @@ function stateAfterUpdates(snakeGame, numberOfUpdates): Promise<GameState> {
         resolve(newState);
       }
     });
+  });
+}
+
+async function getLatestState(snakeGame: SnakeGame): Promise<GameState> {
+  return new Promise(resolve => {
+    const unsubscribe = snakeGame.subscribe(resolve);
+    unsubscribe();
   });
 }
