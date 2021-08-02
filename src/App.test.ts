@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { render, fireEvent, act } from '@testing-library/svelte';
 
 import App from './App.svelte';

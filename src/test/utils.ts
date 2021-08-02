@@ -4,9 +4,10 @@ import type { GameState, Square } from '../core/types';
 /**
  * Assertion that ignores square id.
  */
-export function expectSquare(
-  actualSquare: Square,
-): { toEqual(expectedSquare: Partial<Square>): void; toBeEmpty(): void } {
+export function expectSquare(actualSquare: Square): {
+  toEqual(expectedSquare: Partial<Square>): void;
+  toBeEmpty(): void;
+} {
   return {
     toEqual(expectedSquare) {
       expect(typeof actualSquare === 'object' && typeof expectedSquare === 'object').toBeTruthy();

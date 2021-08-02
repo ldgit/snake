@@ -6,8 +6,12 @@ import type { Direction, GameState } from './types';
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 describe('snake game', () => {
+  let snakeGame: SnakeGame;
+
+  afterEach(() => snakeGame.destroy());
+
   it('can start new game', async () => {
-    const snakeGame = startSnakeGame({});
+    snakeGame = startSnakeGame({});
 
     const initialGameState = await stateAfterUpdates(snakeGame, 0);
 
@@ -20,7 +24,7 @@ describe('snake game', () => {
 
   it.each([40, 120, 200])('updates game state whenever snake moves (delay: %s)', async delay => {
     const startTime = Date.now();
-    const snakeGame = startSnakeGame({ delay });
+    snakeGame = startSnakeGame({ delay });
     const stateUpdated = stateAfterUpdates(snakeGame, 1);
 
     const newState = await stateUpdated;
@@ -31,7 +35,7 @@ describe('snake game', () => {
   });
 
   it('allows controlling snake direction', async () => {
-    const snakeGame = startSnakeGame({ delay: 20 });
+    snakeGame = startSnakeGame({ delay: 20 });
     const snakeGoesDown: Promise<GameState> = new Promise(resolve =>
       snakeGame.subscribe(newState => {
         if (newState.direction === 'down') {
@@ -47,7 +51,7 @@ describe('snake game', () => {
 
   it('should queue change direction commands', async () => {
     const startingTime = Date.now();
-    const snakeGame = startSnakeGame({ delay: 100 });
+    snakeGame = startSnakeGame({ delay: 100 });
     const stateAfterFirstDirectionChange = stateAfterUpdates(snakeGame, 1);
     const snakeTurnsLeft: Promise<GameState> = new Promise(resolve =>
       snakeGame.subscribe(newState => {
@@ -70,7 +74,7 @@ describe('snake game', () => {
 
   it('can be sped up', async () => {
     const startTime = Date.now();
-    const snakeGame = startSnakeGame({ delay: 1000 });
+    snakeGame = startSnakeGame({ delay: 1000 });
     const stateAfterTwoUpdates = stateAfterUpdates(snakeGame, 2);
 
     snakeGame.changeDelayBetweenMoves(50);
@@ -81,7 +85,7 @@ describe('snake game', () => {
 
   it('clears out old setInterval callbacks', async () => {
     const spyLogger = jest.fn();
-    const snakeGame = startSnakeGame({ delay: 150, logger: spyLogger });
+    snakeGame = startSnakeGame({ delay: 150, logger: spyLogger });
     const newDelay = 20;
 
     snakeGame.changeDelayBetweenMoves(newDelay);
@@ -100,7 +104,7 @@ describe('snake game', () => {
 
   it('can be paused and unpaused', async () => {
     const spyLogger = jest.fn();
-    const snakeGame = startSnakeGame({ delay: 10, logger: spyLogger });
+    snakeGame = startSnakeGame({ delay: 10, logger: spyLogger });
     await sleep(30);
     expect(spyLogger).toHaveBeenCalled();
     spyLogger.mockReset();
@@ -118,7 +122,7 @@ describe('snake game', () => {
 
   it('will restore original speed if paused and then unpaused', async () => {
     const spyLogger = jest.fn();
-    const snakeGame = startSnakeGame({ delay: 10, logger: spyLogger });
+    snakeGame = startSnakeGame({ delay: 10, logger: spyLogger });
     await sleep(30);
     expect(spyLogger).toHaveBeenCalled();
     spyLogger.mockReset();
@@ -139,7 +143,7 @@ describe('snake game', () => {
   it.each(['up', 'down'] as Direction[])(
     'disables snake controls if game is paused (attempted direction: %s)',
     async (direction: Direction) => {
-      const snakeGame = startSnakeGame({ delay: 10 });
+      snakeGame = startSnakeGame({ delay: 10 });
       // Guard assertion to confirm initial direction
       expect((await getLatestState(snakeGame)).direction).toEqual('right');
 
@@ -154,7 +158,7 @@ describe('snake game', () => {
 
   it('cleanup timers after game end', async () => {
     const spyLogger = jest.fn();
-    const snakeGame = startSnakeGame({ delay: 4, logger: spyLogger });
+    snakeGame = startSnakeGame({ delay: 4, logger: spyLogger });
 
     // Make the snake crash into itself
     snakeGame.changeDirection('down');
@@ -167,7 +171,7 @@ describe('snake game', () => {
 
   it('calling .destroy() cleans up timers', async () => {
     const spyLogger = jest.fn();
-    const snakeGame = startSnakeGame({ delay: 4, logger: spyLogger });
+    snakeGame = startSnakeGame({ delay: 4, logger: spyLogger });
     snakeGame.destroy();
 
     // await gameOver;
