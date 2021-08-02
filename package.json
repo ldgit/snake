@@ -11,7 +11,8 @@
     "style": "prettier --check .",
     "style:fix": "prettier --write .",
     "svelte-check": "svelte-check",
-    "test:all": "npm run svelte-check && npm run lint && npm run style && npm test"
+    "test:all": "npm run svelte-check && npm run lint && npm run style && npm test",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/core": "^7.14.8",
@@ -30,9 +31,9 @@
     "eslint": "^7.32.0",
     "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-svelte3": "^3.2.0",
-    "husky": "^4.3.8",
+    "husky": "^7.0.1",
     "jest": "^27.0.6",
-    "lint-staged": "^10.5.4",
+    "lint-staged": "^11.1.1",
     "prettier": "^2.3.2",
     "prettier-plugin-svelte": "^2.3.1",
     "rollup": "^2.55.1",
@@ -50,11 +51,6 @@
     "seedrandom": "^3.0.5",
     "sirv-cli": "^1.0.12",
     "uuid": "^8.3.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js,ts}": "eslint --cache --fix",
