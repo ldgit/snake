@@ -38,10 +38,10 @@ function restartGame() {
 </script>
 
 <svelte:window on:keypress={handleKeypress} />
-<main>
-  <h1>Snake</h1>
-  <div class="game">
-    <span class="score">
+<main class="flex flex-col items-center text-center max-w-none">
+  <h1 class="uppercase text-7xl text-svelte-red font-thin my-12">Snake</h1>
+  <div class="flex flex-col items-start">
+    <span class="text-3xl">
       <Score current={gameState.score} />
     </span>
     <Field {gameState} />
@@ -53,34 +53,8 @@ function restartGame() {
     onNewGameClick={restartGame} />
 </main>
 
-<style>
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.game {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.score {
-  font-size: 2rem;
-}
-
-h1 {
-  color: #ff3e00;
-  text-transform: uppercase;
-  font-size: 8vh;
-  font-weight: 100;
-}
-
-@media (min-width: 640px) {
-  main {
-    max-width: none;
-  }
-}
+<style lang="postcss" global>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 </style>
