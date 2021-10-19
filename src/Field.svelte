@@ -18,7 +18,7 @@ function getBodyPartClasses(bodyPart: 'head' | 'trunk' | 'tail'): string {
 
 function getSquareClasses(square: Square): string {
   if (square?.type === 'snake') {
-    return `bg-black ${getBodyPartClasses(square.bodyPart)}`;
+    return `bg-black dark:bg-green-300 ${getBodyPartClasses(square.bodyPart)}`;
   }
   if (square?.type === 'food') {
     return 'rounded-full bg-svelte-red w-vh-small h-vh-small';
@@ -28,7 +28,7 @@ function getSquareClasses(square: Square): string {
 </script>
 
 <div
-  class="snakeBox grid place-items-center gap-vh-small p-vh-small border-4 border-solid border-black"
+  class="snakeBox grid place-items-center gap-vh-small p-vh-small border-4 border-solid border-black dark:border-gray-200"
   style="--width: {WIDTH}; --height: {HEIGHT};">
   {#each gameState.field as row}
     {#each row as square (square.id)}

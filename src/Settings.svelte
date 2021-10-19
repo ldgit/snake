@@ -9,11 +9,10 @@ $: delay = speedMap[speed].delay;
 
 <Hoverable let:hovering class="mt-3 flex flex-col items-center justify-start h-12">
   <span>{speedMap[speed].description}</span>
-  <div class="flex mt-1">
+  <div class="mt-1">
     <input
       class="w-56 mx-2 {hovering ? 'opacity-100' : 'opacity-0'} transition duration-500 ease-in-out"
       type="range"
-      disabled={!hovering || undefined}
       bind:value={speed}
       min="0"
       max={speedMap.length - 1}
