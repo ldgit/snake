@@ -16,7 +16,8 @@ describe('Snake app', () => {
     await fireEvent.keyPress(container, { key: 'w' });
     await fireEvent.keyPress(container, { key: 'a' });
     await act(() => sleep(200));
-    expect(container.querySelectorAll('.trunk').length).toBeGreaterThan(3);
+    expect(container.querySelectorAll('.w-vh-medium').length).toBeGreaterThan(3);
+    expect(container.querySelectorAll('.h-vh-medium').length).toBeGreaterThan(3);
   });
 
   it('should render and change direction without error', async () => {
@@ -28,6 +29,7 @@ describe('Snake app', () => {
     await fireEvent.keyPress(container, { key: 'a' });
     await act(() => sleep(100));
 
-    expect(container.querySelectorAll('.trunk').length).toBeGreaterThan(3);
+    expect(container.querySelectorAll('.w-vh-medium').length).toBeGreaterThan(3);
+    expect(container.querySelectorAll('.h-vh-medium').length).toBeGreaterThan(3);
   });
 });

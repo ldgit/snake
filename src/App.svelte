@@ -10,6 +10,7 @@ import type { GameState } from './core/types';
 let gameState: GameState;
 let delay: number;
 let snakeGame = startSnakeGame({});
+let darkMode = false;
 
 $: snakeGame.subscribe((newState: GameState) => (gameState = newState));
 $: snakeGame.changeDelayBetweenMoves(delay);
@@ -38,49 +39,27 @@ function restartGame() {
 </script>
 
 <svelte:window on:keypress={handleKeypress} />
-<main>
-  <h1>Snake</h1>
-  <div class="game">
-    <span class="score">
-      <Score current={gameState.score} />
-    </span>
-    <Field {gameState} />
-  </div>
-  <Settings bind:delay />
-  <GameOver
-    gameOver={gameState.gameOver}
-    finalScore={gameState.score}
-    onNewGameClick={restartGame} />
-</main>
+<div class="{darkMode && 'dark'} h-full">
+  <main
+    class="flex flex-col items-center text-center h-full dark:bg-gray-900 dark:text-gray-200 transition-colors duration-500">
+    <h1 class="uppercase text-7xl text-svelte-red font-thin my-12">Snake</h1>
+    <div class="flex flex-col items-start">
+      <div class="flex justify-between text-3xl w-full">
+        <span><Score current={gameState.score} /></span>
+        <button on:click={() => (darkMode = !darkMode)}>{darkMode ? '☀️' : '🌙'}</button>
+      </div>
+      <Field {gameState} />
+    </div>
+    <Settings bind:delay />
+    <GameOver
+      gameOver={gameState.gameOver}
+      finalScore={gameState.score}
+      onNewGameClick={restartGame} />
+  </main>
+</div>
 
-<style>
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.game {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.score {
-  font-size: 2rem;
-}
-
-h1 {
-  color: #ff3e00;
-  text-transform: uppercase;
-  font-size: 8vh;
-  font-weight: 100;
-}
-
-@media (min-width: 640px) {
-  main {
-    max-width: none;
-  }
-}
+<style lang="postcss" global>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 </style>
