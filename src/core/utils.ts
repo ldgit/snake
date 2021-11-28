@@ -68,3 +68,11 @@ export function createEmptyField(width: number, height: number): Field {
     .fill(null)
     .map(() => new Array(width).fill(null).map(() => emptySquare()));
 }
+
+export function updateAppearance(darkMode: boolean): void {
+  if (darkMode) {
+    window.document.documentElement.classList.add('dark');
+  } else {
+    window.document.documentElement.classList.remove('dark');
+  }
+}

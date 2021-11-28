@@ -6,6 +6,7 @@ import Settings from './Settings.svelte';
 import startSnakeGame from './core/snake';
 import GameOver from './GameOver.svelte';
 import type { GameState } from './core/types';
+import { updateAppearance } from './core/utils';
 
 let gameState: GameState;
 let delay: number;
@@ -14,14 +15,6 @@ let darkMode = false;
 
 $: snakeGame.subscribe((newState: GameState) => (gameState = newState));
 $: snakeGame.changeDelayBetweenMoves(delay);
-
-function updateAppearence(): void {
-  if (darkMode) {
-    window.document.documentElement.classList.add('dark');
-  } else {
-    window.document.documentElement.classList.remove('dark');
-  }
-}
 
 function handleKeypress(event) {
   const key = event.key.toLowerCase();
@@ -38,7 +31,7 @@ function handleKeypress(event) {
   }
 }
 
-onMount(updateAppearence);
+onMount(() => updateAppearance(darkMode));
 onDestroy(snakeGame.destroy);
 
 function restartGame() {
@@ -56,7 +49,7 @@ function restartGame() {
       <button
         on:click={() => {
           darkMode = !darkMode;
-          updateAppearence();
+          updateAppearance(darkMode);
         }}>{darkMode ? '☀️' : '🌙'}</button>
     </div>
     <Field {gameState} />
