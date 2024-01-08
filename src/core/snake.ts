@@ -28,7 +28,7 @@ export default function startSnakeGame({
   logger = noop,
 }: snakeGameOptions): SnakeGame {
   const { subscribe, update } = writable(newGame());
-  const commandQueue = [];
+  const commandQueue: string[] = [];
   let lastDelay = delay;
   let paused = false;
 

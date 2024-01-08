@@ -1,4 +1,5 @@
-import startSnakeGame, { SnakeGame } from './snake';
+import startSnakeGame from './snake';
+import type { SnakeGame } from './snake';
 import { selectDirection, selectField } from './selectors';
 import { WIDTH, HEIGHT, STARTING_ROW } from './utils';
 import type { Direction, GameState } from './types';
@@ -180,7 +181,7 @@ describe('snake game', () => {
   });
 });
 
-function stateAfterUpdates(snakeGame, numberOfUpdates): Promise<GameState> {
+function stateAfterUpdates(snakeGame: SnakeGame, numberOfUpdates: number): Promise<GameState> {
   let stateUpdatesCount = 0;
 
   return new Promise(resolve => {

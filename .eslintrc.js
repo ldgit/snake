@@ -9,21 +9,28 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:jest/recommended',
+    'plugin:svelte/recommended',
   ],
   parserOptions: {
     ecmaVersion: 2021,
     sourceType: 'module',
+    project: 'tsconfig.json',
+    extraFileExtensions: ['.svelte'],
   },
   rules: {
     'jest/expect-expect': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
   },
-  plugins: ['svelte3', '@typescript-eslint', 'jest'],
+  plugins: ['svelte', '@typescript-eslint', 'jest'],
   overrides: [
     {
       files: ['*.svelte'],
-      processor: 'svelte3/svelte3',
+      parser: 'svelte-eslint-parser',
+      // Parse the `<script>` in `.svelte` as TypeScript by adding the following configuration.
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+      },
     },
   ],
   parser: '@typescript-eslint/parser',

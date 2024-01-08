@@ -1,6 +1,9 @@
 export interface Square {
   id: string;
   bodyPart?: 'head' | 'trunk' | 'tail';
+  /**
+   * Indicates the place of the square inside snake's trunk. Undefined if not a 'trunk' `bodyPart`.
+   */
   index?: number;
   type: 'empty' | 'snake' | 'food';
 }
