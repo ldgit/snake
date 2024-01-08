@@ -1,12 +1,7 @@
-const production = !process.env.ROLLUP_WATCH;
-
-module.exports = {
-  mode: 'jit',
-  purge: {
-    content: ['./public/index.html', './src/**/*.svelte'],
-    enabled: production, // disable purge in dev
-  },
+/** @type {import('tailwindcss').Config} */
+export default {
   darkMode: 'class',
+  content: ['./index.html', './src/**/*.{svelte,js,ts}'],
   theme: {
     extend: {
       colors: {
@@ -32,9 +27,6 @@ module.exports = {
         'vh-xs': '2.5vh',
       },
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [],
 };

@@ -32,6 +32,10 @@ module.exports = {
         parser: '@typescript-eslint/parser',
       },
     },
+    {
+      extends: ['plugin:@typescript-eslint/disable-type-checked'],
+      files: ['./**/*.js'],
+    },
   ],
   parser: '@typescript-eslint/parser',
   settings: {
