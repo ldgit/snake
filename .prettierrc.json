@@ -1,6 +1,9 @@
 {
+  "plugins": ["prettier-plugin-svelte"],
+  "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
   "arrowParens": "avoid",
   "bracketSpacing": true,
+  "bracketSameLine": false,
   "embeddedLanguageFormatting": "auto",
   "htmlWhitespaceSensitivity": "css",
   "insertPragma": false,
@@ -15,7 +18,6 @@
   "useTabs": false,
   "svelteSortOrder": "options-scripts-markup-styles",
   "svelteStrictMode": false,
-  "svelteBracketNewLine": false,
   "svelteAllowShorthand": true,
   "svelteIndentScriptAndStyle": false
 }

@@ -38,7 +38,7 @@ export function moveSnake(
           return { ...snakeTail(), id: square.id };
         }
 
-        return { ...snakeTrunk({ index: square.index + 1 }), id: square.id };
+        return { ...snakeTrunk({ index: square.index! + 1 }), id: square.id };
       }
       if (
         (square.type === 'empty' || square.type === 'food') &&

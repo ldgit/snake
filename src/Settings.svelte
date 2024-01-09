@@ -16,6 +16,7 @@ $: delay = speedMap[speed].delay;
       bind:value={speed}
       min="0"
       max={speedMap.length - 1}
-      step="1" />
+      step="1"
+    />
   </div>
 </Hoverable>

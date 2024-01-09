@@ -50,7 +50,10 @@ function restartGame() {
         on:click={() => {
           darkMode = !darkMode;
           updateAppearance(darkMode);
-        }}>{darkMode ? '☀️' : '🌙'}</button>
+        }}
+      >
+        {darkMode ? '☀️' : '🌙'}
+      </button>
     </div>
     <Field {gameState} />
   </div>
@@ -58,11 +61,6 @@ function restartGame() {
   <GameOver
     gameOver={gameState.gameOver}
     finalScore={gameState.score}
-    onNewGameClick={restartGame} />
+    onNewGameClick={restartGame}
+  />
 </main>
-
-<style lang="postcss" global>
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-</style>

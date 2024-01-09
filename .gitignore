@@ -1,5 +1,8 @@
 /node_modules/
 /public/build/
 
+# production
+/dist
+
 .eslintcache
 .DS_Store

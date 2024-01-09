@@ -3,6 +3,7 @@ import { snakeHead, snakeTail, snakeTrunk } from './squares';
 import { WIDTH, HEIGHT, STARTING_ROW, createEmptyField } from './utils';
 import { selectDirection } from './selectors';
 import { createState } from '../test/utils';
+import { describe, it, expect } from 'vitest';
 
 describe('changeDirection', () => {
   it('can change from right-moving direction', () => {

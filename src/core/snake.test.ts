@@ -1,7 +1,9 @@
-import startSnakeGame, { SnakeGame } from './snake';
+import startSnakeGame from './snake';
+import type { SnakeGame } from './snake';
 import { selectDirection, selectField } from './selectors';
 import { WIDTH, HEIGHT, STARTING_ROW } from './utils';
 import type { Direction, GameState } from './types';
+import { vi, describe, it, expect, afterEach } from 'vitest';
 
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
@@ -66,10 +68,10 @@ describe('snake game', () => {
 
     expect(selectDirection(await stateAfterFirstDirectionChange)).toEqual('down');
     // First change in direction needs to happen after snake moves one more square, ie. after at least `delay` milliseconds
-    expect(Date.now() - startingTime).toBeGreaterThan(100);
+    expect(Date.now() - startingTime).toBeGreaterThanOrEqual(100);
     expect(selectDirection(await snakeTurnsLeft)).toEqual('left');
     // Second change in direction needs to happen after snake moves one more square, ie. after at least 2 x `delay` milliseconds
-    expect(Date.now() - startingTime).toBeGreaterThan(200);
+    expect(Date.now() - startingTime).toBeGreaterThanOrEqual(200);
   });
 
   it('can be sped up', async () => {
@@ -80,11 +82,11 @@ describe('snake game', () => {
     snakeGame.changeDelayBetweenMoves(50);
 
     await stateAfterTwoUpdates;
-    expect(Date.now() - startTime).toBeLessThan(150);
+    expect(Date.now() - startTime).toBeLessThanOrEqual(150);
   });
 
   it('clears out old setInterval callbacks', async () => {
-    const spyLogger = jest.fn();
+    const spyLogger = vi.fn();
     snakeGame = startSnakeGame({ delay: 150, logger: spyLogger });
     const newDelay = 20;
 
@@ -103,7 +105,7 @@ describe('snake game', () => {
   });
 
   it('can be paused and unpaused', async () => {
-    const spyLogger = jest.fn();
+    const spyLogger = vi.fn();
     snakeGame = startSnakeGame({ delay: 10, logger: spyLogger });
     await sleep(30);
     expect(spyLogger).toHaveBeenCalled();
@@ -121,7 +123,7 @@ describe('snake game', () => {
   });
 
   it('will restore original speed if paused and then unpaused', async () => {
-    const spyLogger = jest.fn();
+    const spyLogger = vi.fn();
     snakeGame = startSnakeGame({ delay: 10, logger: spyLogger });
     await sleep(30);
     expect(spyLogger).toHaveBeenCalled();
@@ -157,7 +159,7 @@ describe('snake game', () => {
   );
 
   it('cleanup timers after game end', async () => {
-    const spyLogger = jest.fn();
+    const spyLogger = vi.fn();
     snakeGame = startSnakeGame({ delay: 4, logger: spyLogger });
 
     // Make the snake crash into itself
@@ -170,7 +172,7 @@ describe('snake game', () => {
   });
 
   it('calling .destroy() cleans up timers', async () => {
-    const spyLogger = jest.fn();
+    const spyLogger = vi.fn();
     snakeGame = startSnakeGame({ delay: 4, logger: spyLogger });
     snakeGame.destroy();
 
@@ -180,7 +182,7 @@ describe('snake game', () => {
   });
 });
 
-function stateAfterUpdates(snakeGame, numberOfUpdates): Promise<GameState> {
+function stateAfterUpdates(snakeGame: SnakeGame, numberOfUpdates: number): Promise<GameState> {
   let stateUpdatesCount = 0;
 
   return new Promise(resolve => {

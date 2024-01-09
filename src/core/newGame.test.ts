@@ -2,6 +2,7 @@ import { newGame } from './newGame';
 import { WIDTH, HEIGHT, STARTING_ROW } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 import { expectSquare } from '../test/utils';
+import { describe, it, expect } from 'vitest';
 
 describe('newGame', () => {
   it('should return a field 31x18 in size', () => {
