@@ -1,7 +1,9 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import { render, fireEvent, act } from '@testing-library/svelte';
+import 'vitest-dom/extend-expect';
+import { describe, it, expect } from 'vitest';
 
 import App from './App.svelte';
 

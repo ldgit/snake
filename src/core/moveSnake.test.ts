@@ -4,6 +4,7 @@ import { snakeHead, snakeTail, snakeTrunk, food } from './squares';
 import { WIDTH, HEIGHT, STARTING_ROW, findCoordinatesForSquare, createEmptyField } from './utils';
 import { selectDirection, selectField, selectSnakeSize } from './selectors';
 import { expectSquare, createState } from '../test/utils';
+import { describe, it, expect } from 'vitest';
 
 describe('moveSnake', () => {
   it('should move snake by one square in current direction', () => {

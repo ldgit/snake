@@ -15,4 +15,4 @@ To run tests: `npm run test:all`
 Build and run production version of the app:
 
 - `npm run build`
-- `npm run start`
+- `npm run preview`

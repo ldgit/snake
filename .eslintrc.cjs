@@ -3,12 +3,11 @@ module.exports = {
     node: true,
     browser: true,
     es6: true,
-    'jest/globals': true,
   },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:jest/recommended',
+    'plugin:vitest/recommended',
     'plugin:svelte/recommended',
   ],
   parserOptions: {
@@ -18,11 +17,11 @@ module.exports = {
     extraFileExtensions: ['.svelte'],
   },
   rules: {
-    'jest/expect-expect': 'off',
+    'vitest/expect-expect': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
   },
-  plugins: ['svelte', '@typescript-eslint', 'jest'],
+  plugins: ['svelte', 'vitest', '@typescript-eslint'],
   overrides: [
     {
       files: ['*.svelte'],

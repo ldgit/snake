@@ -1,5 +1,6 @@
 import { get } from 'svelte/store';
 import startScoring from './score';
+import { describe, it, expect } from 'vitest';
 
 const sleep = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 

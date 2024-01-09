@@ -1,5 +1,6 @@
 import { newGame } from '../core/newGame';
 import type { GameState, Square } from '../core/types';
+import { expect } from 'vitest';
 
 /**
  * Assertion that ignores square id.
