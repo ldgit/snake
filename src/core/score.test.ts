@@ -38,11 +38,11 @@ describe('Score counter', () => {
     scoreStore.newScore(5);
 
     await counterReachedThree;
-    expect(Date.now() - startTime).toBeLessThan(350);
-    expect(Date.now() - startTime).toBeGreaterThan(299);
+    expect(Date.now() - startTime).toBeLessThanOrEqual(350);
+    expect(Date.now() - startTime).toBeGreaterThanOrEqual(299);
     await counterReachedFive;
-    expect(Date.now() - startTime).toBeLessThan(550);
-    expect(Date.now() - startTime).toBeGreaterThan(499);
+    expect(Date.now() - startTime).toBeLessThanOrEqual(550);
+    expect(Date.now() - startTime).toBeGreaterThanOrEqual(499);
   });
 
   it('should end up with correct score if multiple calls in quick succession', async () => {

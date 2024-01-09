@@ -7,4 +7,5 @@ export default defineConfig({
     // this ensures that the browser opens upon server start
     open: true,
   },
+  base: '/snake/',
 });
