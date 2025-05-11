@@ -7,6 +7,7 @@ import startSnakeGame from './core/snake';
 import GameOver from './GameOver.svelte';
 import type { GameState } from './core/types';
 import { updateAppearance } from './core/utils';
+import GithubLink from './GithubLink.svelte';
 
 let gameState: GameState;
 let delay: number;
@@ -42,6 +43,7 @@ function restartGame() {
 
 <svelte:window on:keypress={handleKeypress} />
 <main class="flex flex-col items-center text-center">
+  <GithubLink />
   <h1 class="uppercase text-7xl text-svelte-red font-thin my-12">Snake</h1>
   <div class="flex flex-col items-start">
     <div class="flex justify-between text-3xl w-full">
