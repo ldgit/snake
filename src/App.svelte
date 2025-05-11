@@ -8,14 +8,20 @@ import GameOver from './GameOver.svelte';
 import type { GameState } from './core/types';
 import { updateAppearance } from './core/utils';
 import GithubLink from './GithubLink.svelte';
+import { getDefaultSpeed } from './core/speedLevels';
+import { newGame } from './core/newGame';
 
-let gameState: GameState;
-let delay: number;
 let snakeGame = startSnakeGame({});
-let darkMode = false;
+let gameState: GameState = $state.raw(newGame());
+let delay: number = $state(getDefaultSpeed());
+let darkMode = $state(false);
 
-$: snakeGame.subscribe((newState: GameState) => (gameState = newState));
-$: snakeGame.changeDelayBetweenMoves(delay);
+$effect(() => {
+  snakeGame.subscribe((newState: GameState) => {
+    gameState = newState;
+  });
+  snakeGame.changeDelayBetweenMoves(delay);
+});
 
 function handleKeypress(event) {
   const key = event.key.toLowerCase();
@@ -41,7 +47,7 @@ function restartGame() {
 }
 </script>
 
-<svelte:window on:keypress={handleKeypress} />
+<svelte:window onkeypress={handleKeypress} />
 <main class="flex flex-col items-center text-center">
   <GithubLink />
   <h1 class="uppercase text-7xl text-svelte-red font-thin my-12">Snake</h1>
@@ -49,7 +55,7 @@ function restartGame() {
     <div class="flex justify-between text-3xl w-full">
       <span><Score current={gameState.score} /></span>
       <button
-        on:click={() => {
+        onclick={() => {
           darkMode = !darkMode;
           updateAppearance(darkMode);
         }}
