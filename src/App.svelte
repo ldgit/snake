@@ -48,13 +48,14 @@ function restartGame() {
 </script>
 
 <svelte:window onkeypress={handleKeypress} />
-<main class="flex flex-col items-center text-center">
+<main class="flex flex-col items-center text-center text-gray-900 dark:text-gray-200">
   <GithubLink />
   <h1 class="uppercase text-7xl text-svelte-red font-thin my-12">Snake</h1>
   <div class="flex flex-col items-start">
     <div class="flex justify-between text-3xl w-full">
       <span><Score current={gameState.score} /></span>
       <button
+        class="cursor-pointer"
         onclick={() => {
           darkMode = !darkMode;
           updateAppearance(darkMode);
