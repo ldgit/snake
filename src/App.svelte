@@ -11,7 +11,7 @@ import GithubLink from './GithubLink.svelte';
 import { getDefaultSpeed } from './core/speedLevels';
 import { newGame } from './core/newGame';
 
-let snakeGame = startSnakeGame({});
+let snakeGame = $state.raw(startSnakeGame({}));
 let gameState: GameState = $state.raw(newGame());
 let delay: number = $state(getDefaultSpeed());
 let darkMode = $state(false);
@@ -39,7 +39,7 @@ function handleKeypress(event) {
 }
 
 onMount(() => updateAppearance(darkMode));
-onDestroy(snakeGame.destroy);
+onDestroy(() => snakeGame.destroy);
 
 function restartGame() {
   snakeGame.destroy();

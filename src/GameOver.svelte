@@ -2,9 +2,11 @@
 import { scale } from 'svelte/transition';
 import { quadIn } from 'svelte/easing';
 
-export let gameOver: boolean;
-export let finalScore: number;
-export let onNewGameClick;
+const {
+  gameOver,
+  finalScore,
+  onNewGameClick,
+}: { gameOver: boolean; finalScore: number; onNewGameClick: () => void } = $props();
 </script>
 
 {#if gameOver}
@@ -18,7 +20,7 @@ export let onNewGameClick;
     </p>
     <button
       class="relative border-none rounded-md w-44 h-14 bg-svelte-red text-white text-base font-bold uppercase px-2 py-4 hover:bg-svelte-red-dark"
-      on:click={onNewGameClick}
+      onclick={onNewGameClick}
     >
       New game
     </button>
